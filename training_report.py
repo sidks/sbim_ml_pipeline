@@ -1359,15 +1359,15 @@ def generate_overlay_reports():
         ]
         
         # reorder targets based on desired order (keep only valid ones)
-        targets = [t for t in EMOTION_ORDER if t in targets]
+        ordered_targets = [t for t in EMOTION_ORDER if t in targets]
 
         emotion_chunks = [
 
-            targets[i:i+4]
+            ordered_targets[i:i+4]
 
             for i in range(
                 0,
-                len(targets),
+                len(ordered_targets),
                 4
             )
         ]
