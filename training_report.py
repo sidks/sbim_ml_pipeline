@@ -1311,7 +1311,7 @@ def generate_overlay_reports():
         # ====================================================
 
         bar_path = (
-            f"{OUTPUT_DIR}/{pid}_bar.png"
+            f"{PNG_DIR}/{pid}_bar.png"
         )
 
         save_bar_plot(
@@ -1526,7 +1526,7 @@ def generate_overlay_reports():
                     # ====================================================
 
                     img_path = (
-                        f"{OUTPUT_DIR}/"
+                        f"{PNG_DIR}/"
                         f"{pid}_{t}.png"
                     )
 
