@@ -1347,6 +1347,20 @@ def generate_overlay_reports():
         # OTHER PAGES
         # ====================================================
 
+        EMOTION_ORDER = [
+            "happy_intensity",
+            "sad_intensity",
+            "calm_intensity",
+            "anxious_intensity",
+            "social_intensity",
+            "irritated_intensity",
+            "bored_intensity",
+            "motivated_intensity"
+        ]
+        
+        # reorder targets based on desired order (keep only valid ones)
+        targets = [t for t in EMOTION_ORDER if t in targets]
+
         emotion_chunks = [
 
             targets[i:i+4]
