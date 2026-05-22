@@ -412,12 +412,13 @@ TARGET_NAME_MAP = {
 
     "happy_intensity": "Happiness",
     "sad_intensity": "Sadness",
-    "social_intensity": "Social",
     "calm_intensity": "Calm",
-    "motivated_intensity": "Motivated",
-    "bored_intensity": "Bored",
     "anxious_intensity": "Anxious",
-    "irritated_intensity": "Irritated"
+    "social_intensity": "Social",
+    "irritated_intensity": "Irritated",
+    "bored_intensity": "Bored",
+    "motivated_intensity": "Motivated"
+    
 }
 
 def display_target_name(t):
@@ -749,12 +750,13 @@ EMOTION_WORD_MAP = {
 
     "happiness": "happy",
     "sadness": "sad",
-    "social": "social",
     "calm": "calm",
-    "motivated": "motivated",
-    "bored": "bored",
     "anxious": "anxious",
-    "irritated": "irritated"
+    "social": "social",
+    "irritated": "irritated",
+    "bored": "bored",
+    "motivated": "motivated"
+    
 }
 
 def emotion_to_word(emotion):
@@ -987,12 +989,13 @@ EMOTION_COLORS = {
 
     "happy_intensity": "#FFD700",      # yellow
     "sad_intensity": "#1f77b4",        # blue
-    "social_intensity": "#800080",     # purple
-    "calm_intensity": "#FFA500",       # orange
-    "motivated_intensity": "#40E0D0",  # teal
-    "bored_intensity": "#d62728",      # red
-    "anxious_intensity": "#808080",    # grey
-    "irritated_intensity": "#2ca02c"   # green
+    "calm_intensity": "#800080",       # purple
+    "anxious_intensity": "#FFA500",    # orange
+    "social_intensity": "#40E0D0",     # teal
+    "irritated_intensity": "#d62728",   # red
+    "bored_intensity": "#808080",      # grey
+    "motivated_intensity": "#2ca02c"  # green
+        
 }
 
 def save_bar_plot(df_pid, path):
