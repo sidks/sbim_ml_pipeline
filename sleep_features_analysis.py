@@ -13,8 +13,8 @@ import pytz
 # CONFIG
 ###############################################################################
 
-ACCEL_CSV = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output/test7_acceleration_2026-01-31_to_2026-04-02.csv"
-SURVEY_CSV = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output/test7_survey_data_2026-01-31_to_2026-04-02.csv"
+ACCEL_CSV = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output/test7_acceleration_2026-03-27_to_2026-06-15.csv"
+SURVEY_CSV = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output/test7_survey_data_2026-03-27_to_2026-06-15.csv"
 
 OUTPUT_CSV = "/srv/repos/sbim_ml_pipeline/sleep_acceleration_analysis.csv"
 
