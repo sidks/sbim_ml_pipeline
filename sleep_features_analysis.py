@@ -235,6 +235,52 @@ def nearest_sample_metrics(timestamps, target_time):
     return prev_min, next_min
 
 
+def compute_overlap_ratio(
+    true_bed,
+    true_wake,
+    gap_start,
+    gap_end,
+):
+    """
+    Overlap between:
+        GT sleep interval      [true_bed, true_wake]
+        Largest gap interval   [gap_start, gap_end]
+
+    Returns:
+        overlap_hours
+        overlap_ratio
+    """
+
+    if (
+        true_bed is None
+        or true_wake is None
+        or gap_start is None
+        or gap_end is None
+    ):
+        return None, None
+
+    overlap_start = max(true_bed, gap_start)
+    overlap_end = min(true_wake, gap_end)
+
+    overlap_seconds = max(
+        0,
+        (overlap_end - overlap_start).total_seconds(),
+    )
+
+    overlap_hours = overlap_seconds / 3600
+
+    true_sleep_hours = (
+        true_wake - true_bed
+    ).total_seconds() / 3600
+
+    if true_sleep_hours <= 0:
+        return overlap_hours, None
+
+    overlap_ratio = overlap_hours / true_sleep_hours
+
+    return overlap_hours, overlap_ratio
+
+
 ###############################################################################
 # MAIN
 ###############################################################################
@@ -296,6 +342,13 @@ def main():
 
         prediction = compute_sleep_prediction(timestamps)
 
+        overlap_hours, overlap_ratio = compute_overlap_ratio(
+            row["true_bed"].astimezone(pytz.UTC),
+            row["true_wake"].astimezone(pytz.UTC),
+            prediction["largest_gap_start"],
+            prediction["largest_gap_end"],
+        )
+
         pred_bed = prediction["pred_bed"]
         pred_wake = prediction["pred_wake"]
 
@@ -353,10 +406,19 @@ def main():
 
                 "wake_prev_sample_min": wake_prev,
                 "wake_next_sample_min": wake_next,
+
+                "overlap_hours": overlap_hours,
+                "overlap_ratio": overlap_ratio,
             }
         )
 
     results_df = pd.DataFrame(results)
+
+    results_df = (
+        results_df
+        .sort_values("survey_date")
+        .reset_index(drop=True)
+    )
 
     results_df.to_csv(
         OUTPUT_CSV,
@@ -391,6 +453,21 @@ def main():
         print(
             results_df["largest_gap_hours"]
             .describe()
+        )
+
+        print(
+            "\nMean overlap ratio:",
+            results_df["overlap_ratio"].mean(),
+        )
+        
+        print(
+            "Median overlap ratio:",
+            results_df["overlap_ratio"].median(),
+        )
+        
+        print(
+            "Mean overlap hours:",
+            results_df["overlap_hours"].mean(),
         )
 
 
