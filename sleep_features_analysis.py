@@ -314,7 +314,7 @@ def main():
                 survey_date.year,
                 survey_date.month,
                 survey_date.day,
-                24,
+                23,
                 0,
                 0,
             ).to_pydatetime()
