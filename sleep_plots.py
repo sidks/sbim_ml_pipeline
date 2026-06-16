@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.dates import DateFormatter
 
-ACCEL_CSV = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output/iwellas_acceleration_2026-03-27_to_2026-06-15.csv"
-output_file = "acceleration_sample_coverage_iwellas.png"
+ACCEL_CSV = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output/iwellnt_acceleration_2026-03-27_to_2026-06-15.csv"
+output_file = "acceleration_sample_coverage_iwellnt.png"
 TIMEZONE = "America/Denver"
 
 # ------------------------------------------------------------------
