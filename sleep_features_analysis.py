@@ -377,6 +377,32 @@ def main():
             row["true_wake"].astimezone(pytz.UTC),
         )
 
+        actual_sleep_duration_hours = (
+            row["true_wake"] - row["true_bed"]
+        ).total_seconds() / 3600
+
+        predicted_sleep_duration_hours = None
+
+        if pred_bed is not None and pred_wake is not None:
+            predicted_sleep_duration_hours = (
+                pred_wake - pred_bed
+            ).total_seconds() / 3600
+
+        sleep_duration_error_hours = None
+
+        if predicted_sleep_duration_hours is not None:
+            sleep_duration_error_hours = (
+                predicted_sleep_duration_hours
+                - actual_sleep_duration_hours
+            )
+
+        sleep_duration_error_min = None
+
+        if sleep_duration_error_hours is not None:
+            sleep_duration_error_min = (
+                sleep_duration_error_hours * 60
+            )
+
         results.append(
             {
                 "survey_date": survey_date,
@@ -411,6 +437,18 @@ def main():
 
                 "overlap_hours": overlap_hours,
                 "overlap_ratio": overlap_ratio,
+
+                "actual_sleep_duration_hours":
+                    actual_sleep_duration_hours,
+                
+                "predicted_sleep_duration_hours":
+                    predicted_sleep_duration_hours,
+                
+                "sleep_duration_error_hours":
+                    sleep_duration_error_hours,
+                
+                "sleep_duration_error_min":
+                    sleep_duration_error_min,
             }
         )
 
@@ -470,6 +508,20 @@ def main():
         print(
             "Mean overlap hours:",
             results_df["overlap_hours"].mean(),
+        )
+
+        print(
+            "\nMean abs sleep duration error (hours):",
+            results_df[
+                "sleep_duration_error_hours"
+            ].abs().mean(),
+        )
+        
+        print(
+            "Median abs sleep duration error (hours):",
+            results_df[
+                "sleep_duration_error_hours"
+            ].abs().median(),
         )
 
 
