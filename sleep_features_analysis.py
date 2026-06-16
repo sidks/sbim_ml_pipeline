@@ -180,7 +180,7 @@ def compute_sleep_prediction(timestamps):
     if largest_gap["gap_hours"] > 3:
 
         pred_bed = largest_gap["left"]
-        pred_wake = largest_gap["right"] - timedelta(hours=1)
+        pred_wake = largest_gap["right"] - timedelta(hours=2)
 
         return {
             "method_used": "gap",
