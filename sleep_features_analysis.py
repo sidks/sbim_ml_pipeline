@@ -58,6 +58,7 @@ def build_ground_truth_sleep_table(survey_df):
     survey_df["completed_at"] = pd.to_datetime(
         survey_df["completed_at"],
         utc=True,
+        format="mixed",
     )
 
     rows = []
@@ -293,6 +294,7 @@ def main():
     accel_df["captured_at"] = pd.to_datetime(
         accel_df["captured_at"],
         utc=True,
+        format="mixed",
     )
 
     gt_df = build_ground_truth_sleep_table(survey_df)
