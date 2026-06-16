@@ -13,10 +13,10 @@ import pytz
 # CONFIG
 ###############################################################################
 
-ACCEL_CSV = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output/iwellas_acceleration_2026-03-27_to_2026-06-15.csv"
-SURVEY_CSV = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output/iwellas_survey_data_2026-03-27_to_2026-06-15.csv"
+ACCEL_CSV = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output/test7_acceleration_2026-03-27_to_2026-06-15.csv"
+SURVEY_CSV = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output/test7_survey_data_2026-03-27_to_2026-06-15.csv"
 
-OUTPUT_CSV = "/srv/repos/sbim_ml_pipeline/sleep_acceleration_analysis_iwellas.csv"
+OUTPUT_CSV = "/srv/repos/sbim_ml_pipeline/sleep_acceleration_analysis_test7.csv"
 
 
 ###############################################################################
@@ -154,6 +154,8 @@ def compute_sleep_prediction(timestamps):
             "largest_gap_start": None,
             "largest_gap_end": None,
             "largest_gap_hours": None,
+            "fallback_first_point": None,
+            "fallback_last_point": None,
         }
 
     gaps = []
@@ -187,6 +189,8 @@ def compute_sleep_prediction(timestamps):
             "largest_gap_start": largest_gap["left"],
             "largest_gap_end": largest_gap["right"],
             "largest_gap_hours": largest_gap["gap_hours"],
+            "fallback_first_point": None,
+            "fallback_last_point": None,
         }
 
     # Fallback logic
@@ -209,6 +213,8 @@ def compute_sleep_prediction(timestamps):
         "largest_gap_start": largest_gap["left"],
         "largest_gap_end": largest_gap["right"],
         "largest_gap_hours": largest_gap["gap_hours"],
+        "fallback_first_point": first_point,
+        "fallback_last_point": last_point,
     }
 
 
@@ -422,6 +428,12 @@ def main():
 
                 "largest_gap_hours":
                     prediction["largest_gap_hours"],
+
+                "fallback_first_point":
+                    prediction["fallback_first_point"],
+                
+                "fallback_last_point":
+                    prediction["fallback_last_point"],
 
                 "pred_bed": pred_bed,
                 "pred_wake": pred_wake,
