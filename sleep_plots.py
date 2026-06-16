@@ -120,11 +120,6 @@ plt.legend()
 
 plt.tight_layout()
 
-# ------------------------------------------------------------------
-# Save
-# ------------------------------------------------------------------
-output_file = "acceleration_sample_coverage.png"
-
 plt.savefig(
     output_file,
     dpi=300,
