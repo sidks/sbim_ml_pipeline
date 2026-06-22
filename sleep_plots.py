@@ -48,7 +48,8 @@ def extract_time_string(json_str, key):
         return None
 
 def time_to_hours(time_str):
-    if not time_str:
+    # Check if time_str is a string and not null/NaN
+    if not isinstance(time_str, str) or not time_str:
         return None
     h, m = map(int, time_str.split(":"))
     return h + m / 60.0
