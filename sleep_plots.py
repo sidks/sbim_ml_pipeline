@@ -70,14 +70,13 @@ daily_sleep = survey_df.groupby("local_date").agg({
 # ------------------------------------------------------------------
 # Plot
 # ------------------------------------------------------------------
-plt.figure(figsize=(20, 8))
+plt.figure(figsize=(22, 8)) # Slightly widened the figure to accommodate the external legend
 
 # Shade regions corresponding to general sleep-analysis window
-plt.axhspan(0, 14, alpha=0.05, color="gray", label="Analysis Window (00:00-14:00)")
-plt.axhspan(18, 24, alpha=0.05, color="gray", label="Analysis Window (18:00-24:00)")
+plt.axhspan(0, 14, alpha=0.05, color="gray", label="Analysis Window (00:00-14:00)", zorder=1)
+plt.axhspan(18, 24, alpha=0.05, color="gray", label="Analysis Window (18:00-24:00)", zorder=1)
 
 # Plot actual self-reported sleep intervals as vertical bars
-# We map them to the correct days based on when the sleep actually occurred
 for _, row in daily_sleep.iterrows():
     survey_date = row["local_date"]
     
@@ -90,6 +89,7 @@ for _, row in daily_sleep.iterrows():
             colors="crimson", 
             linewidth=4, 
             alpha=0.8,
+            zorder=2, # Rendered beneath scatter points
             label="Self-Reported Sleep" if "Self-Reported Sleep" not in plt.gca().get_legend_handles_labels()[1] else ""
         )
         
@@ -103,6 +103,7 @@ for _, row in daily_sleep.iterrows():
             colors="crimson", 
             linewidth=4, 
             alpha=0.8,
+            zorder=2, # Rendered beneath scatter points
             label="Self-Reported Sleep" if "Self-Reported Sleep" not in plt.gca().get_legend_handles_labels()[1] else ""
         )
 
@@ -113,6 +114,7 @@ plt.scatter(
     s=3,
     alpha=0.3,
     color="tab:blue",
+    zorder=3, # Rendered on top of lines
     label="Outside Sleep Window",
 )
 
@@ -123,6 +125,7 @@ plt.scatter(
     s=12,
     alpha=0.7,
     color="tab:orange",
+    zorder=3, # Rendered on top of lines
     label="Inside Sleep Window",
 )
 
@@ -143,12 +146,18 @@ plt.title(f"Acceleration Sample Coverage & Self-Reported Sleep ({TIMEZONE})")
 
 plt.yticks(range(0, 25, 2))
 plt.ylim(0, 24)
-plt.grid(True, alpha=0.3)
+plt.grid(True, alpha=0.3, zorder=0)
 
-# Deduplicate legend items
+# Deduplicate legend items and push it completely outside the frame
 handles, labels = ax.get_legend_handles_labels()
 by_label = dict(zip(labels, handles))
-plt.legend(by_label.values(), by_label.keys(), loc="upper right")
+plt.legend(
+    by_label.values(), 
+    by_label.keys(), 
+    bbox_to_anchor=(1.02, 1), 
+    loc="upper left", 
+    borderaxespad=0.
+)
 
 plt.tight_layout()
 plt.savefig(output_file, dpi=300, bbox_inches="tight")
