@@ -7,9 +7,9 @@ from matplotlib.dates import DateFormatter
 
 # File paths
 BASE_DIR = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output"
-ACCEL_CSV = os.path.join(BASE_DIR, "iwellas_acceleration_2026-03-27_to_2026-06-22.csv")
-SURVEY_CSV = os.path.join(BASE_DIR, "iwellas_survey_data_2026-03-27_to_2026-06-22.csv")
-output_file = "acceleration_sample_coverage_iwellas.png"
+ACCEL_CSV = os.path.join(BASE_DIR, "iwellnt_acceleration_2026-03-27_to_2026-06-22.csv")
+SURVEY_CSV = os.path.join(BASE_DIR, "iwellnt_survey_data_2026-03-27_to_2026-06-22.csv")
+output_file = "acceleration_sample_coverage_iwellnt.png"
 TIMEZONE = "America/Denver"
 
 # ------------------------------------------------------------------
