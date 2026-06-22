@@ -70,11 +70,11 @@ daily_sleep = survey_df.groupby("local_date").agg({
 # ------------------------------------------------------------------
 # Plot
 # ------------------------------------------------------------------
-plt.figure(figsize=(22, 8)) # Slightly widened the figure to accommodate the external legend
+fig, ax = plt.subplots(figsize=(22, 8)) # Use explicit subplots to handle spacing cleanly
 
 # Shade regions corresponding to general sleep-analysis window
-plt.axhspan(0, 14, alpha=0.05, color="gray", label="Analysis Window (00:00-14:00)", zorder=1)
-plt.axhspan(18, 24, alpha=0.05, color="gray", label="Analysis Window (18:00-24:00)", zorder=1)
+ax.axhspan(0, 14, alpha=0.05, color="gray", label="Analysis Window (00:00-14:00)", zorder=1)
+ax.axhspan(18, 24, alpha=0.05, color="gray", label="Analysis Window (18:00-24:00)", zorder=1)
 
 # Plot actual self-reported sleep intervals as vertical bars
 for _, row in daily_sleep.iterrows():
@@ -82,57 +82,56 @@ for _, row in daily_sleep.iterrows():
     
     # 1. Post-midnight sleep: From 00:00 to wake up time on the survey completion day
     if pd.notna(row["wakeup_hour"]):
-        plt.vlines(
+        ax.vlines(
             x=survey_date, 
             ymin=0, 
             ymax=row["wakeup_hour"], 
             colors="crimson", 
             linewidth=4, 
             alpha=0.8,
-            zorder=2, # Rendered beneath scatter points
-            label="Self-Reported Sleep" if "Self-Reported Sleep" not in plt.gca().get_legend_handles_labels()[1] else ""
+            zorder=2, 
+            label="Self-Reported Sleep" if "Self-Reported Sleep" not in ax.get_legend_handles_labels()[1] else ""
         )
         
     # 2. Pre-midnight sleep: From bedtime to 24:00 on the *previous* night
     if pd.notna(row["bedtime_hour"]):
         bedtime_date = survey_date - pd.Timedelta(days=1)
-        plt.vlines(
+        ax.vlines(
             x=bedtime_date, 
             ymin=row["bedtime_hour"], 
             ymax=24, 
             colors="crimson", 
             linewidth=4, 
             alpha=0.8,
-            zorder=2, # Rendered beneath scatter points
-            label="Self-Reported Sleep" if "Self-Reported Sleep" not in plt.gca().get_legend_handles_labels()[1] else ""
+            zorder=2, 
+            label="Self-Reported Sleep" if "Self-Reported Sleep" not in ax.get_legend_handles_labels()[1] else ""
         )
 
 # Outside sleep window points
-plt.scatter(
+ax.scatter(
     outside["date"],
     outside["hour"],
     s=3,
     alpha=0.3,
     color="tab:blue",
-    zorder=3, # Rendered on top of lines
+    zorder=3, 
     label="Outside Sleep Window",
 )
 
 # Inside sleep window points
-plt.scatter(
+ax.scatter(
     inside["date"],
     inside["hour"],
     s=12,
     alpha=0.7,
     color="tab:orange",
-    zorder=3, # Rendered on top of lines
+    zorder=3, 
     label="Inside Sleep Window",
 )
 
 # ------------------------------------------------------------------
 # X-axis formatting
 # ------------------------------------------------------------------
-ax = plt.gca()
 ax.xaxis.set_major_locator(mdates.DayLocator(interval=1))
 ax.xaxis.set_major_formatter(DateFormatter("%m/%d"))
 plt.xticks(rotation=90)
@@ -140,26 +139,34 @@ plt.xticks(rotation=90)
 # ------------------------------------------------------------------
 # Labels
 # ------------------------------------------------------------------
-plt.ylabel("Hour of Day (Local Time)")
-plt.xlabel("Date")
-plt.title(f"Acceleration Sample Coverage & Self-Reported Sleep ({TIMEZONE})")
+ax.set_ylabel("Hour of Day (Local Time)")
+ax.set_xlabel("Date")
+ax.set_title(f"Acceleration Sample Coverage & Self-Reported Sleep ({TIMEZONE})")
 
-plt.yticks(range(0, 25, 2))
-plt.ylim(0, 24)
-plt.grid(True, alpha=0.3, zorder=0)
+ax.set_yticks(range(0, 25, 2))
+ax.set_ylim(0, 24)
+ax.grid(True, alpha=0.3, zorder=0)
 
-# Deduplicate legend items and push it completely outside the frame
+# ------------------------------------------------------------------
+# Layout and Legend Management
+# ------------------------------------------------------------------
+# Deduplicate legend items
 handles, labels = ax.get_legend_handles_labels()
 by_label = dict(zip(labels, handles))
-plt.legend(
+
+# Force the right margin of the graph inward to create whitespace for the legend box
+fig.subplots_adjust(right=0.82)
+
+# Anchor legend to the absolute upper-left corner of that new whitespace
+ax.legend(
     by_label.values(), 
     by_label.keys(), 
-    bbox_to_anchor=(1.02, 1), 
+    bbox_to_anchor=(1.02, 1.0), 
     loc="upper left", 
     borderaxespad=0.
 )
 
-plt.tight_layout()
+# Crucial: DO NOT call plt.tight_layout() here, it will break the subplots_adjust setup
 plt.savefig(output_file, dpi=300, bbox_inches="tight")
 plt.close()
 
