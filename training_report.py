@@ -217,6 +217,7 @@ features = [
 
 target_lst = feeling_cols
 df = df.dropna(subset = features).reset_index(drop = True)
+print('Unique participants:', df['cingo_username'].unique())
 X = df[features]
 y = df[target_lst] if len(target_lst) > 1 else df[target_lst[0]]
 participants = df['cingo_username'].unique()
