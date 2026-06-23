@@ -1294,6 +1294,8 @@ def generate_overlay_reports():
         TEMPLATE_PATH
     )
 
+    print(df.columns[:15].tolist())
+
     for pid in results_all.keys():
 
         print(
