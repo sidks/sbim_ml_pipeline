@@ -216,7 +216,10 @@ features = [
 ]
 
 target_lst = feeling_cols
+print(f"Shape before dropping NaNs: {df.shape}")
 df = df.dropna(subset = features).reset_index(drop = True)
+print(f"Shape after dropping NaNs: {df.shape}")
+
 X = df[features]
 y = df[target_lst] if len(target_lst) > 1 else df[target_lst[0]]
 participants = df['cingo_username'].unique()
