@@ -217,7 +217,7 @@ features = [
 
 target_lst = feeling_cols
 df = df.dropna(subset = features).reset_index(drop = True)
-print('Unique participants:', df['cingo_username'].unique())
+df = df[~df['cingo_username'] == 'appstoretester1']
 X = df[features]
 y = df[target_lst] if len(target_lst) > 1 else df[target_lst[0]]
 participants = df['cingo_username'].unique()
@@ -422,20 +422,6 @@ for target in targets_list:
 
 # for t in global_mae:
 #     print(f"{t}: MAE={global_mae[t]:.4f}  Corr={global_corr[t]:.4f}")
-
-
-# Pick the first available person from your results
-sample_pid = list(results_all.keys())[0] 
-
-# Filter the DataFrame for just this person
-person_df = df[df["cingo_username"] == sample_pid]
-
-print(f"\n--- Data shape for {sample_pid} ---")
-print(f"Rows: {person_df.shape[0]}, Columns: {person_df.shape[1]}")
-
-print(f"\n--- First 5 rows and first 15 columns for {sample_pid} ---")
-# .iloc[:, :15] selects all rows, but only the first 15 columns
-print(person_df.iloc[:, :15].head())
 
 
 ############################################################################################## REPORT GENERATION ##############################################################################################
@@ -1308,8 +1294,6 @@ def generate_overlay_reports():
     template_reader = PdfReader(
         TEMPLATE_PATH
     )
-
-    print(df.columns[:15].tolist())
 
     for pid in results_all.keys():
 
