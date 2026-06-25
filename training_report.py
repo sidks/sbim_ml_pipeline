@@ -548,37 +548,32 @@ def display_target_name(t):
 # ============================================================
 
 integer_feature_map = {}
-
 for _, row in integer_df.iterrows():
-
     integer_feature_map[row["Feature Name"]] = {
-
         "translation": str(row.get("Translation", "")).strip(),
         "units": str(row.get("Units", "")).strip(),
         "timing": str(row.get("Timing", "")).strip(),
-        "general": str(row.get("General", "")).strip()
+        "general1": str(row.get("General1", "")).strip(),
+        "general2": str(row.get("General2", "")).strip()
     }
 
 general_feature_map = {}
-
 for _, row in general_df.iterrows():
-
     general_feature_map[row["Feature Name"]] = {
-
         "translation": str(row.get("Translation", "")).strip(),
         "feature_type": str(row.get("feature_type", "")).strip(),
-        "general": str(row.get("General", "")).strip()
+        # Uses 'General' as general1 in the new general features CSV
+        "general1": str(row.get("General", "")).strip(),
+        "general2": str(row.get("General2", "")).strip()
     }
 
 accel_feature_map = {}
-
 for _, row in accel_df.iterrows():
-
     accel_feature_map[row["Feature Name"]] = {
-
         "translation": str(row.get("Translation", "")).strip(),
         "timing": str(row.get("timing", "")).strip(),
-        "general": str(row.get("General", "")).strip()
+        "general1": str(row.get("General", "")).strip(),
+        "general2": str(row.get("General2", "")).strip()
     }
 
 # ============================================================
@@ -1070,34 +1065,43 @@ def build_threshold_sentence(
 
 def build_general_summary(
     feature_name,
+    emotion,
+    emotion_direction,
     summary_direction
 ):
-
+    # Retrieve info block based on feature map placement
+    info = None
     if feature_name in integer_feature_map:
+        info = integer_feature_map[feature_name]
+    elif feature_name in general_feature_map:
+        info = general_feature_map[feature_name]
+    elif feature_name in accel_feature_map:
+        info = accel_feature_map[feature_name]
 
-        general = integer_feature_map[
-            feature_name
-        ]["general"]
+    if info:
+        g1 = clean_text(info["general1"])
+        g2 = clean_text(info["general2"])
+    else:
+        # Fallback if feature metadata isn't found
+        g1 = feature_name
+        g2 = ""
 
-        return f"{summary_direction} {general}"
+    # Clean directions to lowercase for sentence flow
+    e_dir = emotion_direction.lower()      # "more" or "less"
+    s_dir = summary_direction.lower()      # "more" or "less"
 
-    if feature_name in general_feature_map:
+    # Construct the base clause
+    sentence = f"When you were {e_dir} {emotion}, {g1}"
+    
+    # Append summary direction and general2 if general2 exists
+    if g2:
+        sentence += f" {s_dir} {g2}"
+    else:
+        # If there's no General2 context, fall back cleanly
+        sentence += f" {s_dir}"
 
-        general = general_feature_map[
-            feature_name
-        ]["general"]
-
-        return f"{summary_direction} {general}"
-
-    if feature_name in accel_feature_map:
-
-        general = accel_feature_map[
-            feature_name
-        ]["general"]
-
-        return f"{summary_direction} {general}"
-
-    return f"{summary_direction} {feature_name}"
+    # Clean double spaces and ensure grammatical standard formatting
+    return " ".join(sentence.split()).strip()
 
 # ============================================================
 # BAR PLOT
@@ -1631,16 +1635,10 @@ def generate_overlay_reports():
                             i_feat
                         ]
 
-                        summary_core = (
-                            build_general_summary(
-                                feature_name,
-                                summary_direction
-                            )
-                        )
-
+                        # --- UPDATED CALL ---
                         summary_text = (
                             f"{rank}. "
-                            f"{summary_core}"
+                            f"{build_general_summary(feature_name, emotion, emotion_direction, summary_direction)}"
                         )
 
                         wrapped_summary = wrap(
@@ -1657,7 +1655,7 @@ def generate_overlay_reports():
                             )
 
                             y_sum -= 10
-
+                            
             overlay = create_overlay(
                 draw_page
             )
