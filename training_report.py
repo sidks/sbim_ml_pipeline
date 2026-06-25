@@ -1441,7 +1441,7 @@ def generate_overlay_reports():
                                 by
                             )
 
-                        if len(valid_features) == 2:
+                        if len(valid_features) == 3:
                             break
 
                     c.setFont(
@@ -1613,7 +1613,7 @@ def generate_overlay_reports():
                     # ====================================================
 
                     for rank, i_feat in enumerate(
-                        valid_features,
+                        valid_features[1:],
                         start=1
                     ):
 
