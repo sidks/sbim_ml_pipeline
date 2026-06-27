@@ -13,9 +13,50 @@ output_file = "device_usage_sample_coverage_iwellnt.png"
 TIMEZONE = "America/Denver"
 
 # ------------------------------------------------------------------
-# Load and process acceleration data
+# Load and process acceleration/device data
 # ------------------------------------------------------------------
 accel_df = pd.read_csv(ACCEL_CSV)
+
+# Identify the column containing the event type (defaults to 3rd column if name differs)
+event_col = "event_type" if "event_type" in accel_df.columns else accel_df.columns[2]
+
+# Identify the column containing the JSON payload (defaults to 4th column if name differs)
+json_col = "payload" if "payload" in accel_df.columns else accel_df.columns[3]
+
+# Check if 'SK Device Usage' is present in the data
+has_device_usage = (accel_df[event_col] == "SK Device Usage").any()
+
+if has_device_usage:
+    print("Found 'SK Device Usage' data. Filtering for active unlocks...")
+    # Filter for the correct event type
+    accel_df = accel_df[accel_df[event_col] == "SK Device Usage"].copy()
+    
+    # Helper function to parse JSON payload safely
+    def extract_unlocks(json_str):
+        try:
+            data = json.loads(json_str)
+            return int(data.get("total_unlocks", 0))
+        except Exception:
+            return 0
+
+    # Extract unlocks and isolate rows where user interaction occurred
+    accel_df["total_unlocks"] = accel_df[json_col].apply(extract_unlocks)
+    accel_df = accel_df[accel_df["total_unlocks"] > 0].copy()
+    
+    plot_title = f"Device Unlock Events & Self-Reported Sleep ({TIMEZONE})"
+    outside_label = "Device Unlocks (Outside Window)"
+    inside_label = "Device Unlocks (Inside Window)"
+    marker_size_out, marker_size_in = 25, 35
+    marker_alpha_out, marker_alpha_in = 0.6, 0.8
+else:
+    print("No 'SK Device Usage' data found. Proceeding with raw ping coverage mapping...")
+    plot_title = f"Acceleration Sample Coverage & Self-Reported Sleep ({TIMEZONE})"
+    outside_label = "Outside Sleep Window"
+    inside_label = "Inside Sleep Window"
+    marker_size_out, marker_size_in = 3, 12
+    marker_alpha_out, marker_alpha_in = 0.3, 0.7
+
+# Process timestamps for whatever data remains after the conditional filtering above
 accel_df["captured_at"] = pd.to_datetime(accel_df["captured_at"], format="mixed", utc=True)
 accel_df["local_time"] = accel_df["captured_at"].dt.tz_convert(TIMEZONE)
 accel_df["date"] = accel_df["local_time"].dt.normalize()
@@ -48,7 +89,6 @@ def extract_time_string(json_str, key):
         return None
 
 def time_to_hours(time_str):
-    # Check if time_str is a string and not null/NaN
     if not isinstance(time_str, str) or not time_str:
         return None
     h, m = map(int, time_str.split(":"))
@@ -70,7 +110,7 @@ daily_sleep = survey_df.groupby("local_date").agg({
 # ------------------------------------------------------------------
 # Plot
 # ------------------------------------------------------------------
-fig, ax = plt.subplots(figsize=(22, 8)) # Use explicit subplots to handle spacing cleanly
+fig, ax = plt.subplots(figsize=(22, 8))
 
 # Shade regions corresponding to general sleep-analysis window
 ax.axhspan(0, 14, alpha=0.05, color="gray", label="Analysis Window (00:00-14:00)", zorder=1)
@@ -111,22 +151,22 @@ for _, row in daily_sleep.iterrows():
 ax.scatter(
     outside["date"],
     outside["hour"],
-    s=3,
-    alpha=0.3,
+    s=marker_size_out,
+    alpha=marker_alpha_out,
     color="tab:blue",
     zorder=3, 
-    label="Outside Sleep Window",
+    label=outside_label,
 )
 
 # Inside sleep window points
 ax.scatter(
     inside["date"],
     inside["hour"],
-    s=12,
-    alpha=0.7,
+    s=marker_size_in,
+    alpha=marker_alpha_in,
     color="tab:orange",
     zorder=3, 
-    label="Inside Sleep Window",
+    label=inside_label,
 )
 
 # ------------------------------------------------------------------
@@ -141,7 +181,7 @@ plt.xticks(rotation=90)
 # ------------------------------------------------------------------
 ax.set_ylabel("Hour of Day (Local Time)")
 ax.set_xlabel("Date")
-ax.set_title(f"Acceleration Sample Coverage & Self-Reported Sleep ({TIMEZONE})")
+ax.set_title(plot_title)
 
 ax.set_yticks(range(0, 25, 2))
 ax.set_ylim(0, 24)
@@ -150,14 +190,11 @@ ax.grid(True, alpha=0.3, zorder=0)
 # ------------------------------------------------------------------
 # Layout and Legend Management
 # ------------------------------------------------------------------
-# Deduplicate legend items
 handles, labels = ax.get_legend_handles_labels()
 by_label = dict(zip(labels, handles))
 
-# Force the right margin of the graph inward to create whitespace for the legend box
 fig.subplots_adjust(right=0.82)
 
-# Anchor legend to the absolute upper-left corner of that new whitespace
 ax.legend(
     by_label.values(), 
     by_label.keys(), 
@@ -166,7 +203,6 @@ ax.legend(
     borderaxespad=0.
 )
 
-# Crucial: DO NOT call plt.tight_layout() here, it will break the subplots_adjust setup
 plt.savefig(output_file, dpi=300, bbox_inches="tight")
 plt.close()
 
