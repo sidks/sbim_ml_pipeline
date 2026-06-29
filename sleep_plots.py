@@ -7,9 +7,9 @@ from matplotlib.dates import DateFormatter
 
 # File paths
 BASE_DIR = "/srv/repos/raddlab_datascience/cingo-db-data-extractor/output"
-ACCEL_CSV = os.path.join(BASE_DIR, "test7_light_2026-03-27_to_2026-06-27.csv")
+ACCEL_CSV = os.path.join(BASE_DIR, "test7_battery_2026-03-27_to_2026-06-27.csv")
 SURVEY_CSV = os.path.join(BASE_DIR, "test7_survey_data_2026-03-27_to_2026-06-27.csv")
-output_file = "light_sample_coverage_test7.png"
+output_file = "battery_sample_coverage_test7.png"
 TIMEZONE = "America/Denver"
 
 # ------------------------------------------------------------------
@@ -23,9 +23,10 @@ json_col = "payload" if "payload" in accel_df.columns else accel_df.columns[3]
 has_device_usage = (accel_df[event_col] == "SK Device Usage").any()
 has_battery_status = (accel_df[event_col] == "Battery Status").any()
 
-# Initialize data structures for localized plotting conditions
-plugged_in_df = pd.DataFrame()
-unplugged_df = pd.DataFrame()
+# Initialize data structures for tracking battery level trends
+charging_df = pd.DataFrame()
+discharging_df = pd.DataFrame()
+constant_df = pd.DataFrame()
 
 # Scenario A: Handle Device Unlocks
 if has_device_usage:
@@ -46,29 +47,33 @@ if has_device_usage:
     marker_size_out, marker_size_in = 25, 35
     marker_alpha_out, marker_alpha_in = 0.6, 0.8
 
-# Scenario B: Handle Battery State Changes (Plugged In / Unplugged)
+# Scenario B: Handle Battery Trends (Increasing, Decreasing, Constant)
 elif has_battery_status:
-    print("Found 'Battery Status' data. Isolating transition milestones...")
+    print("Found 'Battery Status' data. Calculating charge trend directions...")
     accel_df = accel_df[accel_df[event_col] == "Battery Status"].copy()
     
-    # Chronological sort ensures correct chronological delta calculation
+    # Chronological sort is crucial for calculating the delta over time correctly
     accel_df["captured_at_dt"] = pd.to_datetime(accel_df["captured_at"], format="mixed", utc=True)
     accel_df = accel_df.sort_values("captured_at_dt")
     
-    def extract_charging_status(json_str):
+    def extract_battery_level(json_str):
         try:
             data = json.loads(json_str)
-            return bool(data.get("batteryIsCharging", data.get("battery_is_charging", False)))
+            # Handle camelCase or snake_case naming variants dynamically
+            return float(data.get("batteryLevel", data.get("battery_level", 0.0)))
         except Exception:
-            return False
+            return None
 
-    accel_df["is_charging"] = accel_df[json_col].apply(extract_charging_status)
-    accel_df["state_changed"] = accel_df["is_charging"].diff().fillna(False)
+    accel_df["battery_level"] = accel_df[json_col].apply(extract_battery_level)
+    accel_df = accel_df.dropna(subset=["battery_level"]).copy()
     
-    # Keep only target transition instances
-    accel_df = accel_df[accel_df["state_changed"] == True].copy()
+    # Calculate numerical difference between current record and previous record
+    accel_df["level_delta"] = accel_df["battery_level"].diff()
     
-    plot_title = f"Battery Charging Transitions & Self-Reported Sleep ({TIMEZONE})"
+    # Drop the first row since its delta is always NaN
+    accel_df = accel_df.dropna(subset=["level_delta"]).copy()
+    
+    plot_title = f"Battery Level Trends & Self-Reported Sleep ({TIMEZONE})"
 
 # Scenario C: Fallback to Raw Pings
 else:
@@ -90,9 +95,10 @@ if not accel_df.empty:
     )
 
     if has_battery_status:
-        # Segment processed battery dataset into dedicated directional frames
-        plugged_in_df = accel_df[accel_df["is_charging"] == True]
-        unplugged_df = accel_df[accel_df["is_charging"] == False]
+        # Segment data based on math delta boundaries
+        charging_df = accel_df[accel_df["level_delta"] > 0]
+        discharging_df = accel_df[accel_df["level_delta"] < 0]
+        constant_df = accel_df[accel_df["level_delta"] == 0]
     else:
         accel_df["in_sleep_window"] = (accel_df["hour"] >= 18) | (accel_df["hour"] < 14)
         inside = accel_df[accel_df["in_sleep_window"]]
@@ -152,19 +158,26 @@ for _, row in daily_sleep.iterrows():
 
 # Render data based on telemetry context discovered above
 if has_battery_status:
-    # Plot Plugged In events (Green upward triangles)
-    if not plugged_in_df.empty:
+    # Constant level dots (Grey) - Plotted first so charging/discharging overlaps it clearly
+    if not constant_df.empty:
         ax.scatter(
-            plugged_in_df["date"], plugged_in_df["hour"],
-            marker="^", s=70, color="forestgreen", alpha=0.9, zorder=3,
-            label="Plugged In (Charging Started)"
+            constant_df["date"], constant_df["hour"],
+            s=15, color="darkgray", alpha=0.4, zorder=3,
+            label="Battery Constant"
         )
-    # Plot Unplugged events (Red downward triangles)
-    if not unplugged_df.empty:
+    # Increasing level dots (Green)
+    if not charging_df.empty:
         ax.scatter(
-            unplugged_df["date"], unplugged_df["hour"],
-            marker="v", s=70, color="firebrick", alpha=0.9, zorder=3,
-            label="Unplugged (Charging Stopped)"
+            charging_df["date"], charging_df["hour"],
+            s=35, color="forestgreen", alpha=0.8, zorder=4,
+            label="Battery Increasing (Charging)"
+        )
+    # Decreasing level dots (Red)
+    if not discharging_df.empty:
+        ax.scatter(
+            discharging_df["date"], discharging_df["hour"],
+            s=35, color="firebrick", alpha=0.8, zorder=4,
+            label="Battery Decreasing (In Use)"
         )
 else:
     # Scatter layouts for Standard Device Unlocks or Basic Ping Coverages
