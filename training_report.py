@@ -1050,6 +1050,8 @@ def build_threshold_sentence(
             else "less"
         )
 
+        emotion_word = emotion_to_word(emotion)
+
         sentence = (
 
             f"When {translation} "
@@ -1059,7 +1061,7 @@ def build_threshold_sentence(
             f"{timing}, " 
             f"you were "
             f"{emotion_direction} "
-            f"{emotion}."
+            f"{emotion_word}."
         )
 
         return " ".join(sentence.split())
@@ -1067,7 +1069,7 @@ def build_threshold_sentence(
     # ========================================================
     # FALLBACK
     # ========================================================
-
+    
     return (
 
         f"When {feature_name} was "
@@ -1109,8 +1111,10 @@ def build_general_summary(
     e_dir = emotion_direction.lower()      # "more" or "less"
     s_dir = summary_direction.lower()      # "more" or "less"
 
+    emotion_word = emotion_to_word(emotion)
+
     # Construct the base clause
-    sentence = f"When you were {e_dir} {emotion}, {g1}"
+    sentence = f"When you were {e_dir} {emotion_word}, {g1}"
     
     # Append summary direction and general2 if general2 exists
     if g2:
@@ -1605,9 +1609,7 @@ def generate_overlay_reports():
                     )
                     
                     header = (
-                        f"These are the top two "
-                        f"actions associated with "
-                        f"{emotion_phrase}:"
+                        f"Also..."
                     )
 
                     wrapped_header = wrap(
