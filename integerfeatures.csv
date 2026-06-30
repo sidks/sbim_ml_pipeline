@@ -1,0 +1,90 @@
+Feature Name,Translation,Units,Timing,General1,General2
+app_usage_total_minutes_per_hour,the total time you spent on any apps was,minutes,,you spent,time on any apps on your phone
+app_usage_category_books_minutes_per_hour,"you used book and reading apps (this may include apps like Audible, Amazon Kindle, and Goodreads) for",minutes,,you spent,"time on book and reading apps (this may include apps like Audible, Amazon Kindle, and Goodreads)"
+app_usage_category_business_minutes_per_hour,"you used business apps (this may include apps like Zoom, LinkedIn, or Indeed) for",minutes,,you spent,"time on business apps (this may include apps like Zoom, LinkedIn, or Indeed)"
+app_usage_category_catalogs_minutes_per_hour,you used catalog apps for,minutes,,you spent,time on catalog apps
+app_usage_category_developer_tools_minutes_per_hour,you used developer apps (this may include apps like GitHub or Testflight) for,minutes,,you spent,time on developer apps (this may include apps like GitHub or Testflight)
+app_usage_category_education_minutes_per_hour,"you used education apps (this may include apps like Duolingo, Khan Academy, and Quizlet) for",minutes,,you spent,"time on education apps (this may include apps like Duolingo, Khan Academy, and Quizlet)"
+app_usage_category_entertainment_minutes_per_hour,"you used entertainment apps (this may include apps like TikTok, Netflix, and Hulu) for",minutes,,you spent,"time on entertainment apps (this may include apps like TikTok, Netflix, and Hulu)"
+app_usage_category_finance_minutes_per_hour,"you used finance apps (this may include apps like Venmo, Paypall, or CashApp) for",minutes,,you spent,"time on finance apps (this may include apps like Venmo, Paypall, or CashApp)"
+app_usage_category_food_and_drink_minutes_per_hour,you used food and drink apps (this may include apps like Doordash or Uber Eats) for,minutes,,you spent,time on food and drink apps (this may include apps like Doordash or Uber Eats)
+app_usage_category_games_minutes_per_hour,"you used game apps (this may include apps like Roblox, Minecraft, and Fortnite) for",minutes,,you spent,"time on game apps (this may include apps like Roblox, Minecraft, and Fortnite)"
+app_usage_category_graphics_and_design_minutes_per_hour,you used graphics and design apps (this may include apps like Adobe) for,minutes,,you spent,time on graphics and design apps (this may include apps like Adobe)
+app_usage_category_health_and_fitness_minutes_per_hour,you used health and fitness apps (this may include apps like Calm and Planet Fitness) for,minutes,,you spent,time on health and fitness apps (this may include apps like Calm and Planet Fitness)
+app_usage_category_kids_minutes_per_hour,you used kids apps for,minutes,,you spent,time on kids apps
+app_usage_category_lifestyle_minutes_per_hour,you used lifestyle apps (this may include apps like Pinterest and Lemon8) for,minutes,,you spent,time on lifestyle apps (this may include apps like Pinterest and Lemon8)
+app_usage_category_medical_minutes_per_hour,you used medical apps for,minutes,,you spent,time on medical apps
+app_usage_category_miscellaneous_minutes_per_hour,you used miscellaneous apps for,minutes,,you spent,time on miscellaneous apps
+app_usage_category_music_minutes_per_hour,you used music apps (this may include apps like Spotify and Youtube Music) for,minutes,,you spent,time on music apps (this may include apps like Spotify and Youtube Music)
+app_usage_category_navigation_minutes_per_hour,you used navigation apps (this may include apps like Google Maps and Transit) for,minutes,,you spent,time on navigation apps (this may include apps like Google Maps and Transit)
+app_usage_category_news_minutes_per_hour,"you used news apps (this may include apps like Reddit, NPR, and X) for",minutes,,you spent,"time on news apps (this may include apps like Reddit, NPR, and X)"
+app_usage_category_newsstand_minutes_per_hour,you used newstand apps (this may include apps like Apple News) for,minutes,,you spent,time on newstand apps (this may include apps like Apple News)
+app_usage_category_photo_and_video_minutes_per_hour,"you used photo and video apps (this may include apps like Instagram, Snapchat, and Youtube) for",minutes,,you spent,"time on photo and video apps (this may include apps like Instagram, Snapchat, and Youtube)"
+app_usage_category_productivity_minutes_per_hour,"you used productivity apps (this may include apps like Gmail, ChatGPT, and Google Drive) for",minutes,,you spent,"time on productivity apps (this may include apps like Gmail, ChatGPT, and Google Drive)"
+app_usage_category_reference_minutes_per_hour,you used reference apps (this may include apps like Google Translate) for,minutes,,you spent,time on reference apps (this may include apps like Google Translate)
+app_usage_category_shopping_minutes_per_hour,"you used shopping apps (this may include apps like Amazon, Temu, Depop, and Shein) for",minutes,,you spent,"time on shopping apps (this may include apps like Amazon, Temu, Depop, and Shein)"
+app_usage_category_social_networking_minutes_per_hour,"you used social networking apps (this may include apps like Facebook, Discord, Threads, and BeReal) for",minutes,,you spent,"time on social networking apps (this may include apps like Facebook, Discord, Threads, and BeReal)"
+app_usage_category_sports_minutes_per_hour,"you used sports apps (this may include apps like ESPN, NFL, and MLB) for",minutes,,you spent,"time on sports apps (this may include apps like ESPN, NFL, and MLB)"
+app_usage_category_stickers_minutes_per_hour,you used stickers apps for,minutes,,you spent,time on stickers apps
+app_usage_category_travel_minutes_per_hour,"you used travel apps (this may include apps like Uber, AirBnB, and Expedia) for",minutes,,you spent,"time on travel apps (this may include apps like Uber, AirBnB, and Expedia)"
+app_usage_category_utilities_minutes_per_hour,you used utilities apps (this may include apps like Google and Chrome) for,minutes,,you spent,time on utilities apps (this may include apps like Google and Chrome)
+app_usage_category_weather_minutes_per_hour,you used weather apps for,minutes,,you spent,time on weather apps
+app_usage_total_minutes_daily,the total time you spent on any apps was,minutes,in a day,you spent,time on any apps on your phone daily
+app_usage_category_books_minutes_daily,"you used book and reading apps (this may include apps like Audible, Amazon Kindle, and Goodreads) for",minutes,in a day,you spent,"time on book and reading apps (this may include apps like Audible, Amazon Kindle, and Goodreads) daily"
+app_usage_category_business_minutes_daily,"you used business apps (this may include apps like Zoom, LinkedIn, or Indeed) for",minutes,in a day,you spent,"time on business apps (this may include apps like Zoom, LinkedIn, or Indeed) daily"
+app_usage_category_catalogs_minutes_daily,you used catalog apps for,minutes,in a day,you spent,time on catalog apps daily
+app_usage_category_developer_tools_minutes_daily,you used developer apps (this may include apps like GitHub or Testflight) for,minutes,in a day,you spent,time on developer apps (this may include apps like GitHub or Testflight) daily
+app_usage_category_education_minutes_daily,you used education apps (this may include apps like Duolingo and Quizlet) for,minutes,in a day,you spent,"time on education apps (this may include apps like Duolingo, Khan Academy, and Quizlet) daily"
+app_usage_category_entertainment_minutes_daily,"you used entertainment apps (this may include apps like TikTok, Netflix, and Hulu) for",minutes,in a day,you spent,"time on entertainment apps (this may include apps like TikTok, Netflix, and Hulu) daily"
+app_usage_category_finance_minutes_daily,"you used finance apps (this may include apps like Venmo, Paypall, or CashApp) for",minutes,in a day,you spent,"time on finance apps (this may include apps like Venmo, Paypall, or CashApp) daily"
+app_usage_category_food_and_drink_minutes_daily,you used food and drink apps (this may include apps like Doordash or Uber Eats) for,minutes,in a day,you spent,time on food and drink apps (this may include apps like Doordash or Uber Eats) daily
+app_usage_category_games_minutes_daily,you used game apps (this may include apps like Roblox and Fortnite) for,minutes,in a day,you spent,"time on game apps (this may include apps like Roblox, Minecraft, and Fortnite) daily"
+app_usage_category_graphics_and_design_minutes_daily,you used graphics and design apps (this may include apps like Adobe) for,minutes,in a day,you spent,time on graphics and design apps (this may include apps like Adobe) daily
+app_usage_category_health_and_fitness_minutes_daily,you used health and fitness apps (this may include apps like Calm and Planet Fitness) for,minutes,in a day,you spent,time on health and fitness apps (this may include apps like Calm and Planet Fitness) daily
+app_usage_category_kids_minutes_daily,you used kids apps for,minutes,in a day,you spent,time on kids apps daily
+app_usage_category_lifestyle_minutes_daily,"you used lifestyle apps (this may include apps like Pinterest, Tinder, and Bumble) for",minutes,in a day,you spent,time on lifestyle apps (this may include apps like Pinterest and Lemon8) daily
+app_usage_category_medical_minutes_daily,you used medical apps for,minutes,in a day,you spent,time on medical apps daily
+app_usage_category_miscellaneous_minutes_daily,you used miscellaneous apps for,minutes,in a day,you spent,time on miscellaneous apps daily
+app_usage_category_music_minutes_daily,you used music apps (this may include apps like Spotify and Youtube Music) for,minutes,in a day,you spent,time on music apps (this may include apps like Spotify and Youtube Music) daily
+app_usage_category_navigation_minutes_daily,you used navigation apps (this may include apps like Google Maps and Transit) for,minutes,in a day,you spent,time on navigation apps (this may include apps like Google Maps and Transit) daily
+app_usage_category_news_minutes_daily,"you used news apps (this may include apps like Reddit, NPR, and X) for",minutes,in a day,you spent,"time on news apps (this may include apps like Reddit, NPR, and X) daily"
+app_usage_category_newsstand_minutes_daily,you used newstand apps (this may include apps like Apple News) for,minutes,in a day,you spent,time on newstand apps (this may include apps like Apple News) daily
+app_usage_category_photo_and_video_minutes_daily,"you used photo and video apps (this may include apps like Instagram, Snapchat, and Youtube) for",minutes,in a day,you spent,"time on photo and video apps (this may include apps like Instagram, Snapchat, and Youtube) daily"
+app_usage_category_productivity_minutes_daily,"you used productivity apps (this may include apps like Gmail, ChatGPT, and Google Drive) for",minutes,in a day,you spent,"time on productivity apps (this may include apps like Gmail, ChatGPT, and Google Drive) daily"
+app_usage_category_reference_minutes_daily,you used reference apps (this may include apps like Google Translate) for,minutes,in a day,you spent,time on reference apps (this may include apps like Google Translate) daily
+app_usage_category_shopping_minutes_daily,"you used shopping apps (this may include apps like Amazon, Temu, and Shein) for",minutes,in a day,you spent,"time on shopping apps (this may include apps like Amazon, Temu, Depop, and Shein) daily"
+app_usage_category_social_networking_minutes_daily,"you used social networking apps (this may include apps like Facebook, Discord, Threads, and BeReal) for",minutes,in a day,you spent,"time on social networking apps (this may include apps like Facebook, Discord, Threads, and BeReal) daily"
+app_usage_category_sports_minutes_daily,"you used sports apps (this may include apps like ESPN, NFL, and MLB) for",minutes,in a day,you spent,"time on sports apps (this may include apps like ESPN, NFL, and MLB) daily"
+app_usage_category_stickers_minutes_daily,you used stickers apps for,minutes,in a day,you spent,time on stickers apps daily
+app_usage_category_travel_minutes_daily,"you used travel apps (this may include apps like Uber, AirBnB, and Expedia) for",minutes,in a day,you spent,"time on travel apps (this may include apps like Uber, AirBnB, and Expedia) daily"
+app_usage_category_utilities_minutes_daily,you used utilities apps (this may include apps like Google and Chrome) for,minutes,in a day,you spent,time on utilities apps (this may include apps like Google and Chrome) daily
+app_usage_category_weather_minutes_daily,you used weather apps for,minutes,in a day,you spent,time on weather apps daily
+distance_per_hour,you traveled,miles,,you traveled,
+span_per_hour,you traveled,miles,,you traveled,
+num_incoming_messages_per_hour,you received,text messages,,you received,text messages
+num_outgoing_messages_per_hour,you sent,text messages,,you sent,text messages
+num_unique_contacts_per_hour,you were messaging,different people,,you were messaging,different people
+num_total_incoming_and_outgoing_messages_daily,you sent and received,text messages,in a day,you sent and received,text messages
+num_incoming_calls_daily,you received,calls,in a day,you received,phone calls
+num_outgoing_calls_daily,you made,calls,in a day,you made,phone calls
+phone_call_duration_minutes_daily,you called for,minutes,in a day,you called for,time
+num_unique_contacts_daily,you called,different people,in a day,you called,different people
+screen_wakes_per_hour,"your phone screen was awake (includes checking the time, receiving notifications)",times,,"your phone screen was awake (includes checking the time, receiving notifications)",times
+unlocks_per_hour,you unlocked your phone,times,,you unlocked your phone,
+unlocked_minutes_per_hour,you unlocked your phone for,minutes,,you unlocked your phone for,time
+screen_wakes_working_day,"your phone screen was awake (includes checking the time, receiving notifications)",times,during the day,"your phone screen was awake (includes checking the time, receiving notifications)",times during the day
+unlocks_working_day,you unlocked your phone,times,during the day,you unlocked your phone,
+unlocked_minutes_working_day,you unlocked your phone for,minutes,during the day,you unlocked your phone for,time during the day
+screen_wakes_last_night,"your phone screen was awake (includes checking the time, receiving notifications)",times,during the night,"your phone screen was awake (includes checking the time, receiving notifications)",times at night
+unlocks_last_night,you unlocked your phone,times,during the night,you unlocked your phone,
+unlocked_minutes_last_night,you unlocked your phone for,minutes,during the night,you unlocked your phone for,time at time
+estimated_sleep_duration_hours,"you were inactive during the night (includes sleeping, not checking your phone, charging your phone, not moving) for",hours,,you were,"inactive during the night (includes sleeping, not checking your phone, charging your phone, not moving)"
+time_spent_at_home_hrs_yesterday,you were at home for,hours,in a day,"in a day, you spent",time at home
+time_spent_at_home_hrs_two_days_ago,you were at home for,hours,in two days,"in two days, you spent",time at home
+time_spent_at_home_avg_hrs_past_week,you were at home for,hours,in a week,"in a week, you spent",time at home
+keyboard_total_taps_per_hour,you tapped your keyboard,times,in an hour,you tapped your phone keyboard,times
+keyboard_total_words_per_hour,you typed,words,in an hour,you typed,words
+keyboard_input_modes,you used,keyboard inputs (this may include changing your language),in an hour,you used,keyboard inputs (this may include changing your language)
+keyboard_average_daily_taps_per_hour,"you tapped your keyboard, on average",times,in an hour,you tapped your phone keyboard,"times, on average"
+keyboard_average_daily_words_per_hour,"you typed, on average",times,in an hour,you typed,"words, on average"
+keyboard_input_modes_daily,you used,keyboard inputs (this may include changing your language),in a day,you used,keyboard inputs (this may include changing your language)
