@@ -1,7 +1,0 @@
-Feature Name,Translation,feature_type,timing,General,LUX VALUE,LUX PARAMETER,AREA VALUE,AREA PARAMETER
-convex_area,the area that you covered while traveling was,AREA,,area covered while you were traveling,0.002,the light during a moonless clear night sky,60,a one bedroom apartment
-buffer_space,the area that you covered while traveling was,AREA,,area covered while you were traveling,0.01,the light from a quarter moon ,90,a two bedroom apartment
-min_lux_mean,the dimmest light around you was,LUX,,dim amount of light ,0.05,the light from a full moon,250,a house
-max_lux_mean,the brightest light around you was ,LUX,,bright amount of light,5,the light during twilight,400,a basketball court
-mean_lux_mean,the typical brightness of light around you was ,LUX,,typical amount of light for you,50,the lights in family living rooms,500,a large movie auditorium
-std_lux_mean,the variability of brightness of light around you was ,LUX,,variability in the amount of light,100,the light on a dark overcast day,"1,500",an ice-skating rink
