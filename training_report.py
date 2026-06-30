@@ -1423,6 +1423,22 @@ def generate_overlay_reports():
                     if t not in results_all[pid]:
                         continue
 
+                    # ====================================================
+                    # POSITION CUSTOMIZATIONS (COORDINATE SHIFTS)
+                    # ====================================================
+                    
+                    # Page 2 (chunk_idx == 0) adjustments:
+                    if chunk_idx == 0:
+                        # Move Emotion 1 (col 0, row 0) and Emotion 3 (col 0, row 1) to the left
+                        if col == 0:
+                            x_base -= 15  # Shift 15 points to the left
+
+                    # Page 3 (chunk_idx == 1) adjustments:
+                    elif chunk_idx == 1:
+                        # Move Emotion 7 (col 0, row 1) and Emotion 8 (col 1, row 1) up
+                        if row == 1:
+                            y_base += 15  # Shift 20 points up
+
                     res = results_all[pid][t]
 
                     shap_vals = np.vstack(
