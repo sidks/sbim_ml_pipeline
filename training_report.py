@@ -582,16 +582,17 @@ for _, row in accel_df.iterrows():
 
 LUX_THRESHOLDS = [
 
-    (0.01, "complete darkness"),
+    (0.002, "the light during a moonless clear night sky"),
+    (0.01, "the light from a quarter moon"),
     (0.05, "the light from a full moon"),
-    (1, "very dim indoor light"),
-    (10, "dim indoor lighting"),
-    (50, "a dark room"),
-    (100, "normal indoor lighting"),
-    (500, "a brightly lit office"),
-    (1000, "an overcast outdoor day"),
+    (5, "the light during twilight"),
+    (50, "the lights in family living rooms"),
+    (100, "the light on a dark overcast day"),
+    (320, "the average office lighting"),
+    (400, "light from a sunset"),
+    (1000, "the light on an overcast day"),
     (10000, "daylight"),
-    (100000, "bright sunlight")
+    (32000, "direct sunlight")
 ]
 
 # ============================================================
@@ -600,13 +601,31 @@ LUX_THRESHOLDS = [
 
 AREA_THRESHOLDS = [
 
-    (50000, "a small building"),
-    (500000, "a city block"),
-    (5000000, "a neighborhood"),
-    (50000000, "a small town"),
-    (140000000, "the city of Paris"),
+    (60, "a one bedroom apartment"),
+    (90, "a two bedroom apartment"),
+    (250, "a house"),
+    (400, "a basketball court"),
+    (500, "a large movie auditorium"),
+    (1500, "an ice-skating rink"),
+    (3000, "a supermarket"),
+    (5000, "a football field"),
+    (15000, "a running track"),
+    (30000, "the Colorado state Capitol building"),
+    (62000, "Ball Arena"),
+    (140000, "a shopping mall"),
+    (320000, "the Denver Zoo"),
+    (500000, "the campus of Denver University"),
+    (2500000, "the campus of the University of Colorado, Boulder"),
+    (3500000, "Central Park in New York City"),
+    (5000000, "the Cheyenne Mountain Zoo"),
+    (13000000, "Dillon Resevoir"),
+    (65000000, "the city of Boulder"),
+    (140000000, "Denver International Airport"),
     (400000000, "the city of Denver"),
-    (1000000000, "a large metropolitan area")
+    (1000000000, "Rocky Mountain National Park"),
+    (4000000000, "the state of Rhode Island"),
+    (140000000000, "the state of Iowa"),
+    (270000000000, "the state of Colorado")
 ]
 
 # ============================================================
