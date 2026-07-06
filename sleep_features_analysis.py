@@ -8,19 +8,19 @@ import pandas as pd
 import pytz
 
 ###############################################################################
-# CONFIG: THREE SEPARATE INPUT FILES
+# CONFIG: PARTICIPANT "iwellnt" FILES
 ###############################################################################
 BASE_DIR = Path("/srv/repos/raddlab_datascience/cingo-db-data-extractor/output")
 
-ACCEL_CSV = BASE_DIR / "iwellas_acceleration_2026-06-04_to_2026-07-05.csv"
-LIGHT_CSV = BASE_DIR / "iwellas_light_2026-06-04_to_2026-07-05.csv"
-DEVICE_CSV = BASE_DIR / "iwellas_device_usage_2026-06-04_to_2026-07-05.csv"
-SURVEY_CSV = BASE_DIR / "iwellas_survey_data_2026-06-04_to_2026-07-05.csv"
+ACCEL_CSV = BASE_DIR / "iwellnt_acceleration_2026-03-27_to_2026-06-27.csv"
+LIGHT_CSV = BASE_DIR / "iwellnt_light_2026-03-27_to_2026-06-27.csv"
+DEVICE_CSV = BASE_DIR / "iwellnt_device_usage_2026-03-27_to_2026-06-27.csv"
+SURVEY_CSV = BASE_DIR / "iwellnt_survey_data_2026-03-27_to_2026-06-27.csv"
 
-OUTPUT_CSV = "/srv/repos/sbim_ml_pipeline/sleep_analysis_iwellas_new_logic.csv"
+OUTPUT_CSV = "/srv/repos/sbim_ml_pipeline/sleep_acceleration_analysis_iwellnt_new_logic.csv"
 
 ###############################################################################
-# SURVEY GROUND TRUTH PARSING
+# SURVEY GROUND TRUTH PARSING WITH DAYTIME ERROR CORRECTION
 ###############################################################################
 def extract_time_from_response(response_str, key):
     if pd.isna(response_str):
@@ -65,6 +65,13 @@ def build_ground_truth_sleep_table(survey_df):
         bed_hour, bed_min = map(int, bed_time_str.split(":"))
         wake_hour, wake_min = map(int, wake_time_str.split(":"))
 
+        # --- AUTO-CORRECT DAYTIME BEDTIME ERRORS ---
+        # If bedtime is reported between 9:00 AM and 5:00 PM, shift it back 12 hours
+        if 9 <= bed_hour <= 17:
+            original_str = f"{bed_hour:02d}:{bed_min:02d}"
+            bed_hour -= 12
+            print(f"[{survey_date}] Corrected daytime bedtime error: {original_str} -> {bed_hour:02d}:{bed_min:02d}")
+
         true_bed = tz.localize(pd.Timestamp(survey_date.year, survey_date.month, survey_date.day, bed_hour, bed_min)) - timedelta(days=1)
         true_wake = tz.localize(pd.Timestamp(survey_date.year, survey_date.month, survey_date.day, wake_hour, wake_min))
 
@@ -78,10 +85,9 @@ def build_ground_truth_sleep_table(survey_df):
     return pd.DataFrame(rows)
 
 ###############################################################################
-# INDEPENDENT STREAM PARSING HELPER
+# TELEMETRY LOADING HELPER
 ###############################################################################
 def load_and_localize_stream(file_path, tz):
-    """Loads a CSV stream, converts to datetime, and registers a local hour decimal."""
     if not Path(file_path).exists():
         return pd.DataFrame(columns=["captured_at", "local_time", "hour"])
         
@@ -92,34 +98,32 @@ def load_and_localize_stream(file_path, tz):
     return df
 
 ###############################################################################
-# NEW WINDOWED MULTI-SENSOR HEURISTIC LOGIC
+# WINDOWED MULTI-SENSOR HEURISTIC LOGIC
 ###############################################################################
 def compute_sleep_prediction_new(accel_df, light_df, unlock_df, window_start, window_end):
-    # Slice arrays to current bounding analysis frame
     a_win = accel_df[(accel_df["captured_at"] >= window_start) & (accel_df["captured_at"] <= window_end)]
     l_win = light_df[(light_df["captured_at"] >= window_start) & (light_df["captured_at"] <= window_end)]
     u_win = unlock_df[(unlock_df["captured_at"] >= window_start) & (unlock_df["captured_at"] <= window_end)]
 
-    # Dynamic time window boolean selectors (Handling overnight crossing for 8 PM - 1 AM)
     bed_cond = lambda df: (df["hour"] >= 20.0) | (df["hour"] <= 1.0)
     wake_cond = lambda df: (df["hour"] >= 4.0) & (df["hour"] <= 10.0)
 
     bed_candidates = []
     wake_candidates = []
 
-    # 1. Acceleration Rule (Last in Bed window, First in Wake window)
+    # 1. Acceleration
     a_bed = a_win[bed_cond(a_win)]["captured_at"].max()
     a_wake = a_win[wake_cond(a_win)]["captured_at"].min()
     if pd.notna(a_bed): bed_candidates.append(a_bed)
     if pd.notna(a_wake): wake_candidates.append(a_wake)
 
-    # 2. Device Unlock Rule (Last in Bed window, First in Wake window)
+    # 2. Device Unlock
     u_bed = u_win[bed_cond(u_win)]["captured_at"].max()
     u_wake = u_win[wake_cond(u_win)]["captured_at"].min()
     if pd.notna(u_bed): bed_candidates.append(u_bed)
     if pd.notna(u_wake): wake_candidates.append(u_wake)
 
-    # 3. Light Sensor Rule (Last in Bed window, Avg of first two in Wake window)
+    # 3. Light Sensor
     l_bed = l_win[bed_cond(l_win)]["captured_at"].max()
     if pd.notna(l_bed): bed_candidates.append(l_bed)
     
@@ -130,7 +134,7 @@ def compute_sleep_prediction_new(accel_df, light_df, unlock_df, window_start, wi
     elif len(l_wake_pts) == 1:
         wake_candidates.append(l_wake_pts[0])
 
-    # Ensemble execution rule overrides
+    # Ensemble rules
     pred_bed = max(bed_candidates) if bed_candidates else None
     pred_wake = min(wake_candidates) if wake_candidates else None
 
@@ -140,43 +144,43 @@ def compute_sleep_prediction_new(accel_df, light_df, unlock_df, window_start, wi
 # MAIN PIPELINE
 ###############################################################################
 def main():
-    survey_df = pd.read_csv(SURVEY_CSV)
-    gt_df = build_ground_truth_sleep_table(survey_df)
-    print(f"Loaded {len(gt_df)} ground truth sleep survey days.")
-
-    if gt_df.empty:
-        print("No paired survey rows found. Exiting.")
+    if not SURVEY_CSV.exists():
+        print(f"Survey file not found at: {SURVEY_CSV}")
         return
 
-    # Assume primary user target timezone from first complete record to preload raw dataframes
+    survey_df = pd.read_csv(SURVEY_CSV)
+    gt_df = build_ground_truth_sleep_table(survey_df)
+    print(f"Loaded {len(gt_df)} processed ground truth records.\n")
+
+    if gt_df.empty:
+        return
+
     target_tz = pytz.timezone(gt_df.iloc[0]["timezone"])
 
-    print("Loading telemetry data streams from individual files...")
-    # Load Acceleration
+    print("Loading sensor streams...")
     raw_accel = load_and_localize_stream(ACCEL_CSV, target_tz)
-    
-    # Load Light
     raw_light = load_and_localize_stream(LIGHT_CSV, target_tz)
     
-    # Load Device Usage and process unlocks
-    raw_device = pd.read_csv(DEVICE_CSV)
-    raw_device["captured_at"] = pd.to_datetime(raw_device["captured_at"], utc=True, format="mixed")
-    
-    event_col = "event_type" if "event_type" in raw_device.columns else raw_device.columns[2]
-    json_col = "payload" if "payload" in raw_device.columns else raw_device.columns[3]
-    
-    def isolate_unlocks(row):
-        if row[event_col] == "SK Device Usage":
-            try:
-                return int(json.loads(row[json_col]).get("total_unlocks", 0)) > 0
-            except: return False
-        return False
+    # Process Device usage file for unlocks
+    if DEVICE_CSV.exists():
+        raw_device = pd.read_csv(DEVICE_CSV)
+        raw_device["captured_at"] = pd.to_datetime(raw_device["captured_at"], utc=True, format="mixed")
+        event_col = "event_type" if "event_type" in raw_device.columns else raw_device.columns[2]
+        json_col = "payload" if "payload" in raw_device.columns else raw_device.columns[3]
         
-    raw_device["is_unlock"] = raw_device.apply(isolate_unlocks, axis=1)
-    filtered_unlocks = raw_device[raw_device["is_unlock"] == True].copy()
-    
-    filtered_unlocks["local_time"] = filtered_unlocks["captured_at"].dt.tz_convert(target_tz)
-    filtered_unlocks["hour"] = filtered_unlocks["local_time"].dt.hour + filtered_unlocks["local_time"].dt.minute / 60.0 + filtered_unlocks["local_time"].dt.second / 3600.0
+        def isolate_unlocks(row):
+            if row[event_col] == "SK Device Usage":
+                try:
+                    return int(json.loads(row[json_col]).get("total_unlocks", 0)) > 0
+                except: return False
+            return False
+            
+        raw_device["is_unlock"] = raw_device.apply(isolate_unlocks, axis=1)
+        filtered_unlocks = raw_device[raw_device["is_unlock"] == True].copy()
+        filtered_unlocks["local_time"] = filtered_unlocks["captured_at"].dt.tz_convert(target_tz)
+        filtered_unlocks["hour"] = filtered_unlocks["local_time"].dt.hour + filtered_unlocks["local_time"].dt.minute / 60.0 + filtered_unlocks["local_time"].dt.second / 3600.0
+    else:
+        filtered_unlocks = pd.DataFrame(columns=["captured_at", "hour"])
 
     results = []
 
@@ -184,11 +188,9 @@ def main():
         tz = pytz.timezone(row["timezone"])
         survey_date = row["survey_date"]
 
-        # Main bounding window extraction (18:00 Day-1 to 14:00 Day-0 UTC)
         window_start = (tz.localize(pd.Timestamp(survey_date.year, survey_date.month, survey_date.day, 18, 0)).astimezone(pytz.UTC)) - timedelta(days=1)
         window_end = tz.localize(pd.Timestamp(survey_date.year, survey_date.month, survey_date.day, 14, 0)).astimezone(pytz.UTC)
 
-        # Run heuristic using isolated sensor frames
         pred_bed, pred_wake = compute_sleep_prediction_new(
             raw_accel, raw_light, filtered_unlocks, window_start, window_end
         )
@@ -197,10 +199,7 @@ def main():
         true_wake_utc = row["true_wake"].astimezone(pytz.UTC)
         true_duration = (true_wake_utc - true_bed_utc).total_seconds() / 3600
 
-        bed_error_min = None
-        wake_error_min = None
-        pred_duration_hours = None
-        duration_error_hours = None
+        bed_error_min, wake_error_min, pred_duration_hours, duration_error_hours = None, None, None, None
 
         if pred_bed is not None and pred_wake is not None:
             bed_error_min = (pred_bed - true_bed_utc).total_seconds() / 60
@@ -224,8 +223,8 @@ def main():
     results_df = pd.DataFrame(results).sort_values("survey_date").reset_index(drop=True)
     results_df.to_csv(OUTPUT_CSV, index=False)
 
-    print(f"\nProcessing complete. Saved evaluation tracking data to: {OUTPUT_CSV}")
-    print("\n" + "="*50 + "\nWINDOW HEURISTIC PERFORMANCE METRICS\n" + "="*50)
+    print(f"\nSaved metrics dataset to: {OUTPUT_CSV}")
+    print("\n" + "="*50 + "\nERROR METRICS WITH SURVEY TIME-CORRECTIONS\n" + "="*50)
     
     clean_metrics = results_df.dropna(subset=["bed_error_min", "wake_error_min"])
     if not clean_metrics.empty:
@@ -233,7 +232,7 @@ def main():
         print(f"Mean Abs Waketime Error: {clean_metrics['wake_error_min'].abs().mean():.2f} minutes")
         print(f"Mean Abs Duration Error: {clean_metrics['sleep_duration_error_hours'].abs().mean():.2f} hours")
     else:
-        print("Error metrics calculations omitted: no data matched active window profiles.")
+        print("No matches available to compute statistics.")
     print("="*50)
 
 if __name__ == "__main__":
