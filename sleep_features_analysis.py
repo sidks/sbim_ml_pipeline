@@ -66,18 +66,25 @@ def build_ground_truth_sleep_table(survey_df):
         wake_hour, wake_min = map(int, wake_time_str.split(":"))
 
         # --- AUTO-CORRECT DAYTIME BEDTIME ERRORS ---
-        # If bedtime is reported between 9:00 AM and 5:00 PM, shift it back 12 hours
+        # Initialize the day offset for bedtime (usually -1 day relative to survey day)
+        bed_day_offset = -1
+
         if 9 <= bed_hour <= 17:
             original_str = f"{bed_hour:02d}:{bed_min:02d}"
+            
             if bed_hour == 12:
-                bed_hour = 0  # 12:00 PM noon -> 00:00 midnight
+                bed_hour = 0       # 12:00 PM -> 00:00 midnight
+                bed_day_offset = 0 # June 15th survey midnight means 00:00 on June 15th
             elif bed_hour < 12:
-                bed_hour += 12 # 10:45 AM -> 22:45 (10:45 PM)
+                bed_hour += 12     # 10:45 AM -> 22:45 PM (still previous night, offset remains -1)
             else:
-                bed_hour -= 12 # 13:00 -> 01:00 AM
-            print(f"[{survey_date}] Corrected daytime bedtime error: {original_str} -> {bed_hour:02d}:{bed_min:02d}")
+                bed_hour -= 12     # 13:00 -> 01:00 AM 
+                bed_day_offset = 0 # 1:00 AM belongs to the survey morning itself
+                
+            print(f"[{survey_date}] Corrected bedtime: {original_str} -> {bed_hour:02d}:{bed_min:02d} (Offset day shift: {bed_day_offset})")
 
-        true_bed = tz.localize(pd.Timestamp(survey_date.year, survey_date.month, survey_date.day, bed_hour, bed_min)) - timedelta(days=1)
+        # Apply the dynamic bed day offset safely
+        true_bed = tz.localize(pd.Timestamp(survey_date.year, survey_date.month, survey_date.day, bed_hour, bed_min)) + timedelta(days=bed_day_offset)
         true_wake = tz.localize(pd.Timestamp(survey_date.year, survey_date.month, survey_date.day, wake_hour, wake_min))
 
         rows.append({
