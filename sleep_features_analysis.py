@@ -12,12 +12,12 @@ import pytz
 ###############################################################################
 BASE_DIR = Path("/srv/repos/raddlab_datascience/cingo-db-data-extractor/output")
 
-ACCEL_CSV = BASE_DIR / "test7_acceleration_2026-06-04_to_2026-07-05.csv"
-LIGHT_CSV = BASE_DIR / "test7_light_2026-06-04_to_2026-07-05.csv"
-DEVICE_CSV = BASE_DIR / "test7_device_usage_2026-06-04_to_2026-07-05.csv"
-SURVEY_CSV = BASE_DIR / "test7_survey_data_2026-06-04_to_2026-07-05.csv"
+ACCEL_CSV = BASE_DIR / "iwellas_acceleration_2026-06-04_to_2026-07-05.csv"
+LIGHT_CSV = BASE_DIR / "iwellas_light_2026-06-04_to_2026-07-05.csv"
+DEVICE_CSV = BASE_DIR / "iwellas_device_usage_2026-06-04_to_2026-07-05.csv"
+SURVEY_CSV = BASE_DIR / "iwellas_survey_data_2026-06-04_to_2026-07-05.csv"
 
-OUTPUT_CSV = "/srv/repos/sbim_ml_pipeline/sleep_analysis_test7_new_logic.csv"
+OUTPUT_CSV = "/srv/repos/sbim_ml_pipeline/sleep_analysis_iwellas_new_logic.csv"
 
 ###############################################################################
 # SURVEY GROUND TRUTH PARSING
