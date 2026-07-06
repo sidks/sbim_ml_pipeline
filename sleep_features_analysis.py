@@ -69,7 +69,12 @@ def build_ground_truth_sleep_table(survey_df):
         # If bedtime is reported between 9:00 AM and 5:00 PM, shift it back 12 hours
         if 9 <= bed_hour <= 17:
             original_str = f"{bed_hour:02d}:{bed_min:02d}"
-            bed_hour -= 12
+            if bed_hour == 12:
+                bed_hour = 0  # 12:00 PM noon -> 00:00 midnight
+            elif bed_hour < 12:
+                bed_hour += 12 # 10:45 AM -> 22:45 (10:45 PM)
+            else:
+                bed_hour -= 12 # 13:00 -> 01:00 AM
             print(f"[{survey_date}] Corrected daytime bedtime error: {original_str} -> {bed_hour:02d}:{bed_min:02d}")
 
         true_bed = tz.localize(pd.Timestamp(survey_date.year, survey_date.month, survey_date.day, bed_hour, bed_min)) - timedelta(days=1)
