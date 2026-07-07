@@ -899,6 +899,25 @@ def emotion_to_word(emotion):
     )
 
 # ============================================================
+# COUNTABLE FEATURES FOR "FEWER THAN"
+# ============================================================
+
+FEWER_THAN_FEATURES = {
+    "num_incoming_messages_per_hour",
+    "num_outgoing_messages_per_hour",
+    "num_unique_contacts_per_hour",
+    "num_total_incoming_and_outgoing_messages_daily",
+    "num_incoming_calls_daily",
+    "num_outgoing_calls_daily",
+    "num_unique_contacts_daily",
+    "keyboard_total_words_per_hour",
+    "keyboard_input_modes",
+    "keyboard_average_daily_taps_per_hour",
+    "keyboard_average_daily_words_per_hour",
+    "keyboard_input_modes_daily"
+}
+
+# ============================================================
 # BUILD THRESHOLD SENTENCE
 # ============================================================
 
@@ -909,6 +928,10 @@ def build_threshold_sentence(
     emotion_direction,
     emotion
 ):
+
+    # Adjust grammar for countable/discrete features
+    if threshold_direction == "less than" and feature_name in FEWER_THAN_FEATURES:
+        threshold_direction = "fewer than"
 
     # ========================================================
     # INTEGER FEATURES
