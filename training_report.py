@@ -230,17 +230,15 @@ targets_list = list(y_df.columns)
 results_all = {}
 participants = sorted(df["cingo_username"].unique())
 
+# New data storage to collect feature importance metrics
+feature_importance_records = []
+
 # ============================
 # tqdm ON THE FIRST LOOP HERE
 # ============================
 for pid in tqdm(participants, desc="Participants"):
 
-    # print("\n====================================")
-    # print(f"Participant = {pid}")
-    # print("====================================\n")
-
     df_p = df[df["cingo_username"] == pid].reset_index(drop=True)
-
     results_all[pid] = {}
 
     # ==========================================
@@ -248,15 +246,12 @@ for pid in tqdm(participants, desc="Participants"):
     # ==========================================
     for target in targets_list:
 
-        # print(f"\n----- Target = {target} -----")
-
         # --------------------------------------
         # Keep only rows where THIS target exists
         # --------------------------------------
         df_t = df_p[df_p[target].notna()].reset_index(drop=True)
 
         if len(df_t) < 2:
-            # print("Skipping — too few samples")
             continue
 
         # LOGO over study_day
@@ -272,8 +267,9 @@ for pid in tqdm(participants, desc="Participants"):
         shap_data_all = []
         all_y_true, all_y_pred = [], []
         X_test_list = []
-
-        # print(f"Total study days: {n_days}\n")
+        
+        # Temp list to track feature importance across folds for this current target
+        fold_importance_list = []
 
         for fold, (train_idx, test_idx) in enumerate(
             logo.split(df_t, groups=groups), 1):
@@ -326,9 +322,17 @@ for pid in tqdm(participants, desc="Participants"):
             shap_base_values_all.append(shap_vals.base_values)
             shap_data_all.append(shap_vals.data)
 
+            # --- EXTRACT SHAP FEATURE IMPORTANCE FOR FOLD ---
+            # Take the mean absolute value of SHAP values across test samples for this fold
+            fold_mean_abs_shap = np.mean(np.abs(shap_vals.values), axis=0)
+            fold_importance_list.append(fold_mean_abs_shap)
+
             # METRICS
             fold_mae = mean_absolute_error(y_test[:, 0], y_pred[:, 0])
-            fold_corr = np.corrcoef(y_test[:, 0], y_pred[:, 0])[0, 1]
+            try:
+                fold_corr = np.corrcoef(y_test[:, 0], y_pred[:, 0])[0, 1]
+            except Exception:
+                fold_corr = np.nan
 
             mae_list.append(fold_mae)
             corr_list.append(fold_corr)
@@ -336,6 +340,19 @@ for pid in tqdm(participants, desc="Participants"):
             all_y_true.append(y_test)
             all_y_pred.append(y_pred)
             X_test_list.append(X_test)
+
+        # Average feature importance across all folds for this specific target & participant
+        if fold_importance_list:
+            avg_target_importance = np.mean(np.vstack(fold_importance_list), axis=0)
+            
+            # Map features to their averaged calculation score
+            for feat_idx, feat_name in enumerate(features):
+                feature_importance_records.append({
+                    "Participant_ID": pid,
+                    "Target_Emotion": target,
+                    "Feature_Name": feat_name,
+                    "Mean_Absolute_SHAP_Importance": avg_target_importance[feat_idx]
+                })
 
         # save results for this target
         results_all[pid][target] = {
@@ -350,6 +367,19 @@ for pid in tqdm(participants, desc="Participants"):
             "X_test_list": X_test_list,
         }
 
+# =============================================
+# EXPORT FEATURE IMPORTANCES TO CSV
+# =============================================
+df_importance_output = pd.DataFrame(feature_importance_records)
+# Sort by impact level to maximize file clarity
+df_importance_output = df_importance_output.sort_values(
+    by=["Participant_ID", "Target_Emotion", "Mean_Absolute_SHAP_Importance"], 
+    ascending=[True, True, False]
+).reset_index(drop=True)
+
+# Save file directly
+df_importance_output.to_csv("shap_feature_importances.csv", index=False)
+print("\n[Success] Feature importance metrics saved to 'shap_feature_importances.csv'.")
 
 # =============================================
 # PARTICIPANT + TARGET METRICS
