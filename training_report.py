@@ -114,7 +114,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'unlocked_minutes_per_hour', 'screen_wakes_working_day', 'unlocks_working_day', 'unlocked_minutes_working_day', 'screen_wakes_last_night','unlocks_last_night', 'unlocked_minutes_last_night', 
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
-    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily']] = (df.groupby(["cingo_username", "study_day"])[[
+    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
+    'battery_not_charging_num_pings']] = (df.groupby(["cingo_username", "study_day"])[[
     'magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
     'magnitude_std_working_day', 'magnitude_min_last_night', 'magnitude_max_last_night', 'magnitude_mean_last_night', 'magnitude_median_last_night', 'magnitude_std_last_night', 'app_usage_total_minutes_per_hour', 
     'app_usage_category_books_minutes_per_hour', 'app_usage_category_education_minutes_per_hour', 'app_usage_category_entertainment_minutes_per_hour', 'app_usage_category_games_minutes_per_hour', 
@@ -129,7 +131,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'unlocked_minutes_per_hour', 'screen_wakes_working_day', 'unlocks_working_day', 'unlocked_minutes_working_day', 'screen_wakes_last_night','unlocks_last_night', 'unlocked_minutes_last_night', 
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
-    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily']].transform(lambda x: x.fillna(x.mean())))
+    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
+    'battery_not_charging_num_pings']].transform(lambda x: x.fillna(x.mean())))
 
 # Step 2: For leftovers, fill with mean per beiwe_id
 df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
@@ -146,7 +150,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'unlocked_minutes_per_hour', 'screen_wakes_working_day', 'unlocks_working_day', 'unlocked_minutes_working_day', 'screen_wakes_last_night','unlocks_last_night', 'unlocked_minutes_last_night', 
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
-    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily']] = (df.groupby(["cingo_username"])[[
+    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
+    'battery_not_charging_num_pings']] = (df.groupby(["cingo_username"])[[
     'magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
     'magnitude_std_working_day', 'magnitude_min_last_night', 'magnitude_max_last_night', 'magnitude_mean_last_night', 'magnitude_median_last_night', 'magnitude_std_last_night', 'app_usage_total_minutes_per_hour', 
     'app_usage_category_books_minutes_per_hour', 'app_usage_category_education_minutes_per_hour', 'app_usage_category_entertainment_minutes_per_hour', 'app_usage_category_games_minutes_per_hour', 
@@ -161,7 +167,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'unlocked_minutes_per_hour', 'screen_wakes_working_day', 'unlocks_working_day', 'unlocked_minutes_working_day', 'screen_wakes_last_night','unlocks_last_night', 'unlocked_minutes_last_night', 
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
-    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily']].transform(lambda x: x.fillna(x.mean())))
+    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
+    'battery_not_charging_num_pings']].transform(lambda x: x.fillna(x.mean())))
 
 df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
     'magnitude_std_working_day', 'magnitude_min_last_night', 'magnitude_max_last_night', 'magnitude_mean_last_night', 'magnitude_median_last_night', 'magnitude_std_last_night', 'app_usage_total_minutes_per_hour', 
@@ -177,7 +185,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'unlocked_minutes_per_hour', 'screen_wakes_working_day', 'unlocks_working_day', 'unlocked_minutes_working_day', 'screen_wakes_last_night','unlocks_last_night', 'unlocked_minutes_last_night', 
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
-    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily']] = (df[[
+    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
+    'battery_not_charging_num_pings']] = (df[[
     'magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
     'magnitude_std_working_day', 'magnitude_min_last_night', 'magnitude_max_last_night', 'magnitude_mean_last_night', 'magnitude_median_last_night', 'magnitude_std_last_night', 'app_usage_total_minutes_per_hour', 
     'app_usage_category_books_minutes_per_hour', 'app_usage_category_education_minutes_per_hour', 'app_usage_category_entertainment_minutes_per_hour', 'app_usage_category_games_minutes_per_hour', 
@@ -192,7 +202,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'unlocked_minutes_per_hour', 'screen_wakes_working_day', 'unlocks_working_day', 'unlocked_minutes_working_day', 'screen_wakes_last_night','unlocks_last_night', 'unlocked_minutes_last_night', 
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
-    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily']].transform(lambda x: x.fillna(x.mean())))
+    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
+    'battery_not_charging_num_pings']].transform(lambda x: x.fillna(x.mean())))
 
 feeling_cols = ['happy_intensity', 'sad_intensity', 'social_intensity', 'calm_intensity', 'motivated_intensity', 'bored_intensity', 
                 'anxious_intensity', 'irritated_intensity']
@@ -212,7 +224,9 @@ features = [
     'unlocked_minutes_per_hour', 'screen_wakes_working_day', 'unlocks_working_day', 'unlocked_minutes_working_day', 'screen_wakes_last_night','unlocks_last_night', 'unlocked_minutes_last_night', 
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour','app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
-    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily'
+    'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
+    'battery_not_charging_num_pings'
 ]
 
 target_lst = feeling_cols
