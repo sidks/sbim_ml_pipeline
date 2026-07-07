@@ -1178,6 +1178,9 @@ def build_general_summary(
     e_dir = emotion_direction.lower()      # "more" or "less"
     s_dir = summary_direction.lower()      # "more" or "less"
 
+    if s_dir == "less" and feature_name in FEWER_THAN_FEATURES:
+        s_dir = "fewer"
+
     emotion_word = emotion_to_word(emotion)
 
     # Construct the base clause
