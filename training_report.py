@@ -452,29 +452,6 @@ for target in targets_list:
     global_corr[target] = np.corrcoef(y_true[:, 0], y_pred[:, 0])[0, 1]
 
 
-# =============================================
-# PRINT RESULTS
-# =============================================
-
-# print("\n=============================================")
-# print("Participant-level metrics:")
-# print("=============================================")
-
-# for pid in participant_metrics:
-#     print(f"\nParticipant {pid}")
-#     for t in participant_metrics[pid]:
-#         mae = participant_metrics[pid][t]["mae"]
-#         corr = participant_metrics[pid][t]["corr"]
-#         print(f"{t}: MAE={mae:.4f}  Corr={corr:.4f}")
-
-# print("\n=============================================")
-# print("GLOBAL METRICS")
-# print("=============================================")
-
-# for t in global_mae:
-#     print(f"{t}: MAE={global_mae[t]:.4f}  Corr={global_corr[t]:.4f}")
-
-
 ############################################################################################## REPORT GENERATION ##############################################################################################
 
 # ============================================================
@@ -498,9 +475,6 @@ battery_df = pd.read_csv(BATTERY_CSV)
 # ============================================================
 
 TEMPLATE_PATH = "report_template.pdf"
-# OUTPUT_DIR = "overlay_reports"
-
-# os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # ============================================================
 # OUTPUT DIRECTORY SETUP
@@ -1104,7 +1078,7 @@ def build_threshold_sentence(
         else:
             sentence = (
                 f"When {translation} "
-                f"{size_word}, "
+                f"{size_word} "
                 f"{unit}"
                 f"{' ' + timing if timing else ''}, "
                 f"you were "
