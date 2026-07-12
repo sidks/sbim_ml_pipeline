@@ -575,7 +575,7 @@ for _, row in integer_df.iterrows():
     integer_feature_map[row["Feature Name"]] = {
         "translation": str(row.get("Translation", "")).strip(),
         "units": str(row.get("Units", "")).strip(),
-        "unit_single": str(row.get("Unit_single", "")).strip(),
+        "unit_single": str(row.get("Unit_singular", "")).strip(),
         "timing": str(row.get("Timing", "")).strip(),
         "general1": str(row.get("General", "")).strip(),
         "general2": str(row.get("General2", "")).strip()
