@@ -673,22 +673,17 @@ AREA_THRESHOLDS = [
 ACCELERATION_THRESHOLDS = [
 
     (
-        (0.0, 0.01),
-        "you were not moving"
-    ),
-
-    (
-        (0.01, 1.5),
+        (0.0001, 1.5),
         "walking"
     ),
 
     (
-        (1.51, 3.0),
+        (1.5001, 3.0),
         "running"
     ),
 
     (
-        (3.0, float("inf")),
+        (3.00001, float("inf")),
         "driving"
     )
 ]
@@ -743,19 +738,13 @@ def lookup_acceleration_parameter(value):
     if value == 0:
 
         return (
-            "no activity "
-            "(which includes sitting still)"
+            "you were not moving"
         )
 
     for (low, high), label in ACCELERATION_THRESHOLDS:
 
         if low <= value <= high:
             return label
-
-    return (
-        "mild activity "
-        "(which includes walking and jogging)"
-    )
 
 # ============================================================
 # SHAP THRESHOLD
@@ -1014,12 +1003,11 @@ def build_threshold_sentence(
         emotion_word = emotion_to_word(emotion)
 
         sentence = (
-
             f"When {translation} "
             f"{threshold_direction} "
             f"{int(round(thresh))} "
-            f"{units} "
-            f"{timing}, "
+            f"{units}"
+            f"{' ' + timing if timing else ''}, "
             f"you were "
             f"{emotion_direction} "
             f"{emotion_word}."
@@ -1117,8 +1105,8 @@ def build_threshold_sentence(
             sentence = (
                 f"When {translation} "
                 f"{size_word}, "
-                f"{unit} "
-                f"{timing}, "
+                f"{unit}"
+                f"{' ' + timing if timing else ''}, "
                 f"you were "
                 f"{emotion_direction} "
                 f"{emotion_word}."
@@ -1157,12 +1145,12 @@ def build_threshold_sentence(
         emotion_word = emotion_to_word(emotion)
 
         
-        if int(thresh) > 0:
+        if float(thresh) > 0.00:
             sentence = (
                 f"When {translation} "
                 f"{relation_word} than "
-                f"{parameter} "
-                f"{timing}, " 
+                f"{parameter}"
+                f"{' ' + timing if timing else ''}, " 
                 f"you were "
                 f"{emotion_direction} "
                 f"{emotion_word}."
@@ -1170,8 +1158,8 @@ def build_threshold_sentence(
         else:
             sentence = (
                 f"When "
-                f"{parameter} "
-                f"{timing}, " 
+                f"{parameter}"
+                f"{' ' + timing if timing else ''}, " 
                 f"you were "
                 f"{emotion_direction} "
                 f"{emotion_word}."
@@ -1203,7 +1191,7 @@ def build_threshold_sentence(
         sentence = (
             f"When {translation} "
             f"{threshold_direction} "
-            f"{int(round(thresh))} "
+            f"{int(round(thresh * 100))} "
             f"{unit}, " 
             f"you were "
             f"{emotion_direction} "
