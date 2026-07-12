@@ -611,7 +611,7 @@ for _, row in sd_df.iterrows():
     }
 
 battery_feature_map = {}
-for _, row in sd_df.iterrows():
+for _, row in battery_df.iterrows():
     battery_feature_map[row["Feature Name"]] = {
         "translation": str(row.get("Translation", "")).strip(),
         "unit": str(row.get("Units", "")).strip(),
