@@ -1191,7 +1191,7 @@ def build_threshold_sentence(
         sentence = (
             f"When {translation} "
             f"{threshold_direction} "
-            f"{int(round(thresh * 100))} "
+            f"{int(round(thresh * 100))}"
             f"{unit}, " 
             f"you were "
             f"{emotion_direction} "
