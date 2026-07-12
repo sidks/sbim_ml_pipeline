@@ -1251,6 +1251,7 @@ def build_general_summary(
 
     if info and feature_name in battery_feature_map:
         g1 = clean_text(info["general1"])
+        g2 = False
     elif info:
         g1 = clean_text(info["general1"])
         g2 = clean_text(info["general2"])
