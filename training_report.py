@@ -1133,7 +1133,7 @@ def build_threshold_sentence(
         )
 
         parameter = lookup_acceleration_parameter(
-            int(thresh)
+            float(thresh)
         )
 
         relation_word = (
