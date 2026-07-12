@@ -1,0 +1,6 @@
+Feature Name,Translation,feature_type,timing,General,General2
+convex_area,the area that you traveled was,AREA,,you covered,area
+buffer_space,the area that you traveled was,AREA,,you covered,area
+min_lux_mean,the dimmest light around you was,LUX,,the dimmest light around you was,
+max_lux_mean,the light around you was,LUX,,you had,light around you
+mean_lux_mean,the light around you was,LUX,,you had,light around you

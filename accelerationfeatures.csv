@@ -1,0 +1,13 @@
+Feature Name,Translation,feature_type,timing,General,General2,ACCERELATION VALUE,ACCELERATION PARAMETER
+magnitude_max,your movement was,ACCELERATION,,you were moving,,0,you were not moving
+magnitude_mean,your movement was,ACCELERATION,,you were moving,,0.01-1.5,walking
+magnitude_median,your movement was,ACCELERATION,,you were moving,,1.51-3,running
+magnitude_max_working_day,your movement was,ACCELERATION,during the daytime,you were moving,during the daytime,>3,driving
+magnitude_mean_working_day,your movement was,ACCELERATION,during the daytime,you were moving,during the daytime,,
+magnitude_median_working_day,your movement was,ACCELERATION,during the daytime,you were moving,during the daytime,,
+magnitude_max_last_night,your movement was,ACCELERATION,during the night,you were moving,during the night,,
+magnitude_mean_last_night,your movement was,ACCELERATION,during the night,you were moving,during the night,,
+magnitude_median_last_night,your movement was,ACCELERATION,during the night,you were moving,during the night,,
+magnitude_min,your minimum movement was,ACCELERATION,,your minimum movement was,,,
+magnitude_min_working_day,your minimum movement was,ACCELERATION,during the daytime,your minimum movement was,during the daytime,,
+magnitude_min_last_night,your minimum movement was,ACCELERATION,during the night,your minimum movement was,during the night,,

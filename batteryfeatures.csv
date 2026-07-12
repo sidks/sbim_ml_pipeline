@@ -1,0 +1,5 @@
+Feature Name,Translation,Units,General,Comparitive
+battery_level_min,your lowest battery level was,%,your battery was,low/high
+battery_level_max,your highest battery level was,%,your battery was,low/high
+battery_level_mean,your average battery level was,%,your battery was,low/high
+battery_level_median,your average battery level was,%,your battery was,low/high

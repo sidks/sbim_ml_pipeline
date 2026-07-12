@@ -1,0 +1,5 @@
+Feature Name,Translation,Unit,timing,General,General2
+std_lux_mean,the light around you changed,,,the light around you changed,
+magnitude_std,your movements were,varied,,your movements were,varied
+magnitude_std_working_day,your movements were,varied,during the daytime,your movements were,varied
+magnitude_std_last_night,your movements were,varied,during the night,your movements were,varied
