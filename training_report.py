@@ -115,8 +115,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
-    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
-    'battery_not_charging_num_pings']] = (df.groupby(["cingo_username", "study_day"])[[
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
+    'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_input_modes', 'keyboard_average_daily_taps_per_hour', 
+    'keyboard_average_daily_words_per_hour', 'keyboard_input_modes_daily']] = (df.groupby(["cingo_username", "study_day"])[[
     'magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
     'magnitude_std_working_day', 'magnitude_min_last_night', 'magnitude_max_last_night', 'magnitude_mean_last_night', 'magnitude_median_last_night', 'magnitude_std_last_night', 'app_usage_total_minutes_per_hour', 
     'app_usage_category_books_minutes_per_hour', 'app_usage_category_education_minutes_per_hour', 'app_usage_category_entertainment_minutes_per_hour', 'app_usage_category_games_minutes_per_hour', 
@@ -132,8 +133,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
-    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
-    'battery_not_charging_num_pings']].transform(lambda x: x.fillna(x.mean())))
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
+    'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_input_modes', 'keyboard_average_daily_taps_per_hour', 
+    'keyboard_average_daily_words_per_hour', 'keyboard_input_modes_daily']].transform(lambda x: x.fillna(x.mean())))
 
 # Step 2: For leftovers, fill with mean per beiwe_id
 df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
@@ -151,8 +153,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
-    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
-    'battery_not_charging_num_pings']] = (df.groupby(["cingo_username"])[[
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
+    'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_input_modes', 'keyboard_average_daily_taps_per_hour', 
+    'keyboard_average_daily_words_per_hour', 'keyboard_input_modes_daily']] = (df.groupby(["cingo_username"])[[
     'magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
     'magnitude_std_working_day', 'magnitude_min_last_night', 'magnitude_max_last_night', 'magnitude_mean_last_night', 'magnitude_median_last_night', 'magnitude_std_last_night', 'app_usage_total_minutes_per_hour', 
     'app_usage_category_books_minutes_per_hour', 'app_usage_category_education_minutes_per_hour', 'app_usage_category_entertainment_minutes_per_hour', 'app_usage_category_games_minutes_per_hour', 
@@ -168,8 +171,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
-    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
-    'battery_not_charging_num_pings']].transform(lambda x: x.fillna(x.mean())))
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
+    'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_input_modes', 'keyboard_average_daily_taps_per_hour', 
+    'keyboard_average_daily_words_per_hour', 'keyboard_input_modes_daily']].transform(lambda x: x.fillna(x.mean())))
 
 df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
     'magnitude_std_working_day', 'magnitude_min_last_night', 'magnitude_max_last_night', 'magnitude_mean_last_night', 'magnitude_median_last_night', 'magnitude_std_last_night', 'app_usage_total_minutes_per_hour', 
@@ -186,8 +190,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
-    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
-    'battery_not_charging_num_pings']] = (df[[
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
+    'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_input_modes', 'keyboard_average_daily_taps_per_hour', 
+    'keyboard_average_daily_words_per_hour', 'keyboard_input_modes_daily']] = (df[[
     'magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
     'magnitude_std_working_day', 'magnitude_min_last_night', 'magnitude_max_last_night', 'magnitude_mean_last_night', 'magnitude_median_last_night', 'magnitude_std_last_night', 'app_usage_total_minutes_per_hour', 
     'app_usage_category_books_minutes_per_hour', 'app_usage_category_education_minutes_per_hour', 'app_usage_category_entertainment_minutes_per_hour', 'app_usage_category_games_minutes_per_hour', 
@@ -203,8 +208,9 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour', 'app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
-    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
-    'battery_not_charging_num_pings']].transform(lambda x: x.fillna(x.mean())))
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
+    'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_input_modes', 'keyboard_average_daily_taps_per_hour', 
+    'keyboard_average_daily_words_per_hour', 'keyboard_input_modes_daily']].transform(lambda x: x.fillna(x.mean())))
 
 feeling_cols = ['happy_intensity', 'sad_intensity', 'social_intensity', 'calm_intensity', 'motivated_intensity', 'bored_intensity', 
                 'anxious_intensity', 'irritated_intensity']
@@ -225,8 +231,9 @@ features = [
     'app_usage_category_utilities_minutes_per_hour', 'app_usage_category_utilities_minutes_daily', 'app_usage_category_business_minutes_per_hour','app_usage_category_business_minutes_daily', 'app_usage_category_news_minutes_per_hour', 
     'app_usage_category_news_minutes_daily', 'app_usage_category_graphics_and_design_minutes_per_hour', 'app_usage_category_graphics_and_design_minutes_daily', 'app_usage_category_travel_minutes_per_hour', 
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
-    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'battery_level_earliest', 'battery_level_latest', 'battery_charging_num_pings', 
-    'battery_not_charging_num_pings'
+    'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
+    'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_input_modes', 'keyboard_average_daily_taps_per_hour', 
+    'keyboard_average_daily_words_per_hour', 'keyboard_input_modes_daily'
 ]
 
 target_lst = feeling_cols
@@ -477,10 +484,14 @@ for target in targets_list:
 INTEGER_CSV = "integerfeatures.csv"
 GENERAL_CSV = "generalfeatures.csv"
 ACCEL_CSV = "accelerationfeatures.csv"
+SD_CSV = "sdfeatures.csv"
+BATTERY_CSV = "batteryfeatures.csv"
 
 integer_df = pd.read_csv(INTEGER_CSV)
 general_df = pd.read_csv(GENERAL_CSV)
 accel_df = pd.read_csv(ACCEL_CSV)
+sd_df = pd.read_csv(SD_CSV)
+battery_df = pd.read_csv(BATTERY_CSV)
 
 # ============================================================
 # CONFIG
@@ -511,38 +522,6 @@ BASE_OUTPUT_DIR = "output_reports"
 os.makedirs(BASE_OUTPUT_DIR, exist_ok=True)
 
 base_report_name = args.report_name
-
-# Find existing folders for this report date
-# existing_dirs = glob.glob(
-#     os.path.join(
-#         BASE_OUTPUT_DIR,
-#         f"{base_report_name}-*"
-#     )
-# )
-
-# existing_numbers = []
-
-# for d in existing_dirs:
-
-#     folder_name = os.path.basename(d)
-
-#     match = re.match(
-#         rf"{re.escape(base_report_name)}-(\d+)$",
-#         folder_name
-#     )
-
-#     if match:
-
-#         existing_numbers.append(
-#             int(match.group(1))
-#         )
-
-# # Determine next version number
-# next_number = 1
-
-# if existing_numbers:
-
-#     next_number = max(existing_numbers) + 1
 
 # Main report directory
 OUTPUT_DIR = os.path.join(
@@ -596,8 +575,9 @@ for _, row in integer_df.iterrows():
     integer_feature_map[row["Feature Name"]] = {
         "translation": str(row.get("Translation", "")).strip(),
         "units": str(row.get("Units", "")).strip(),
+        "unit_single": str(row.get("Unit_single", "")).strip(),
         "timing": str(row.get("Timing", "")).strip(),
-        "general1": str(row.get("General1", "")).strip(),
+        "general1": str(row.get("General", "")).strip(),
         "general2": str(row.get("General2", "")).strip()
     }
 
@@ -620,21 +600,39 @@ for _, row in accel_df.iterrows():
         "general2": str(row.get("General2", "")).strip()
     }
 
+sd_feature_map = {}
+for _, row in sd_df.iterrows():
+    sd_feature_map[row["Feature Name"]] = {
+        "translation": str(row.get("Translation", "")).strip(),
+        "unit": str(row.get("Unit", "")).strip(),
+        "timing": str(row.get("timing", "")).strip(),
+        "general1": str(row.get("General", "")).strip(),
+        "general2": str(row.get("General2", "")).strip()
+    }
+
+battery_feature_map = {}
+for _, row in sd_df.iterrows():
+    battery_feature_map[row["Feature Name"]] = {
+        "translation": str(row.get("Translation", "")).strip(),
+        "unit": str(row.get("Units", "")).strip(),
+        "general1": str(row.get("General", "")).strip()
+    }
+
 # ============================================================
 # HARDCODED LUX THRESHOLDS
 # ============================================================
 
 LUX_THRESHOLDS = [
 
-    (0.002, "the light during a moonless clear night sky"),
-    (0.01, "the light from a quarter moon"),
-    (0.05, "the light from a full moon"),
-    (5, "the light during twilight"),
-    (50, "the lights in family living rooms"),
-    (100, "the light on a dark overcast day"),
-    (320, "the average office lighting"),
-    (400, "light from a sunset"),
-    (1000, "the light on an overcast day"),
+    (0.002, "a moonless clear night sky"),
+    (0.01, "a quarter moon"),
+    (0.05, "a full moon"),
+    (5, "twilight"),
+    (50, "a living room"),
+    (100, "a dark overcast day"),
+    (320, "office lighting"),
+    (400, "a sunset"),
+    (1000, "an overcast day"),
     (10000, "daylight"),
     (32000, "direct sunlight")
 ]
@@ -654,22 +652,18 @@ AREA_THRESHOLDS = [
     (3000, "a supermarket"),
     (5000, "a football field"),
     (15000, "a running track"),
-    (30000, "the Colorado state Capitol building"),
+    (30000, "the Colorado State Capitol building"),
     (62000, "Ball Arena"),
     (140000, "a shopping mall"),
     (320000, "the Denver Zoo"),
-    (500000, "the campus of Denver University"),
+    (500000, "the campus of University of Denver"),
     (2500000, "the campus of the University of Colorado, Boulder"),
     (3500000, "Central Park in New York City"),
     (5000000, "the Cheyenne Mountain Zoo"),
     (13000000, "Dillon Resevoir"),
     (65000000, "the city of Boulder"),
     (140000000, "Denver International Airport"),
-    (400000000, "the city of Denver"),
-    (1000000000, "Rocky Mountain National Park"),
-    (4000000000, "the state of Rhode Island"),
-    (140000000000, "the state of Iowa"),
-    (270000000000, "the state of Colorado")
+    (400000000, "the city of Denver")
 ]
 
 # ============================================================
@@ -680,22 +674,22 @@ ACCELERATION_THRESHOLDS = [
 
     (
         (0.0, 0.01),
-        "no activity (which includes sitting still)"
+        "you were not moving"
     ),
 
     (
         (0.01, 1.5),
-        "mild activity (which includes walking and jogging)"
+        "walking"
     ),
 
     (
         (1.51, 3.0),
-        "moderate activity (which includes intense biking and running)"
+        "running"
     ),
 
     (
         (3.0, float("inf")),
-        "high activity (which includes sprinting or driving a car)"
+        "driving"
     )
 ]
 
@@ -707,7 +701,8 @@ SD_THRESHOLDS = {
 
     "magnitude_std": 0.13,
     "magnitude_std_working_day": 0.16,
-    "magnitude_std_last_night": 0.06
+    "magnitude_std_last_night": 0.06,
+    "std_lux_mean": 1491
 }
 
 # ============================================================
@@ -954,11 +949,18 @@ FEWER_THAN_FEATURES = {
     "num_incoming_calls_daily",
     "num_outgoing_calls_daily",
     "num_unique_contacts_daily",
+    "keyboard_total_taps_per_hour",
     "keyboard_total_words_per_hour",
     "keyboard_input_modes",
     "keyboard_average_daily_taps_per_hour",
     "keyboard_average_daily_words_per_hour",
     "keyboard_input_modes_daily"
+}
+
+LIGHT_FEATURES = {
+    "min_lux_mean",
+    "max_lux_mean",
+    "mean_lux_mean"
 }
 
 # ============================================================
@@ -977,6 +979,11 @@ def build_threshold_sentence(
     if threshold_direction == "less than" and feature_name in FEWER_THAN_FEATURES:
         threshold_direction = "fewer than"
 
+    if feature_name in LIGHT_FEATURES and threshold_direction == "less than":
+        threshold_direction = "dimmer than"
+    elif feature_name in LIGHT_FEATURES and threshold_direction == "more than":
+        threshold_direction = "brighter than"
+
     # ========================================================
     # INTEGER FEATURES
     # ========================================================
@@ -991,9 +998,14 @@ def build_threshold_sentence(
             info["translation"]
         )
 
-        units = clean_text(
-            info["units"]
-        )
+        if int(round(thresh)) <= 1:
+            units = clean_text(
+                info["unit_single"]
+            )
+        else:
+            units = clean_text(
+                info["units"]
+            )
 
         timing = clean_text(
             info["timing"]
@@ -1036,13 +1048,13 @@ def build_threshold_sentence(
         if feature_type == "LUX":
 
             parameter = lookup_lux_parameter(
-                thresh
+                int(thresh)
             )
 
         else:
 
             parameter = lookup_area_parameter(
-                thresh
+                int(thresh)
             )
 
         emotion_word = emotion_to_word(emotion)
@@ -1063,29 +1075,54 @@ def build_threshold_sentence(
     # SD FEATURES
     # ========================================================
 
-    if feature_name in SD_THRESHOLDS:
+    if feature_name in sd_feature_map:
+
+        info = sd_feature_map[
+            feature_name
+        ]
 
         benchmark = SD_THRESHOLDS[
             feature_name
         ]
 
+        translation = clean_text(
+            info["translation"]
+        )
+
+        unit = clean_text(
+            info["unit"]
+        )
+
+        timing = clean_text(
+            info["timing"]
+        )
+
         size_word = (
-            "large"
+            "more"
             if thresh > benchmark
-            else "small"
+            else "less"
         )
 
         emotion_word = emotion_to_word(emotion)
-        
-        sentence = (
 
-            f"When the variety of activities "
-            f"that you did was "
+        if feature_name == 'std_lux_mean':
+            sentence = (
+            f"When {translation} "
             f"{size_word}, "
             f"you were "
             f"{emotion_direction} "
             f"{emotion_word}."
         )
+        else:
+            sentence = (
+                f"When {translation} "
+                f"{size_word}, "
+                f"{unit} "
+                f"{timing}, "
+                f"you were "
+                f"{emotion_direction} "
+                f"{emotion_word}."
+            )
 
         return " ".join(sentence.split())
 
@@ -1108,7 +1145,7 @@ def build_threshold_sentence(
         )
 
         parameter = lookup_acceleration_parameter(
-            thresh
+            int(thresh)
         )
 
         relation_word = (
@@ -1119,13 +1156,55 @@ def build_threshold_sentence(
 
         emotion_word = emotion_to_word(emotion)
 
-        sentence = (
+        
+        if int(thresh) > 0:
+            sentence = (
+                f"When {translation} "
+                f"{relation_word} than "
+                f"{parameter} "
+                f"{timing}, " 
+                f"you were "
+                f"{emotion_direction} "
+                f"{emotion_word}."
+            )
+        else:
+            sentence = (
+                f"When "
+                f"{parameter} "
+                f"{timing}, " 
+                f"you were "
+                f"{emotion_direction} "
+                f"{emotion_word}."
+            )
 
+        return " ".join(sentence.split())
+
+
+    # ========================================================
+    # BATTERY FEATURES
+    # ========================================================
+
+    if feature_name in battery_feature_map:
+
+        info = battery_feature_map[
+            feature_name
+        ]
+
+        translation = clean_text(
+            info["translation"]
+        )
+
+        unit = clean_text(
+            info["unit"]
+        )
+
+        emotion_word = emotion_to_word(emotion)
+        
+        sentence = (
             f"When {translation} "
-            f"similar to or "
-            f"{relation_word} than "
-            f"{parameter} "
-            f"{timing}, " 
+            f"{threshold_direction} "
+            f"{int(round(thresh))} "
+            f"{unit}, " 
             f"you were "
             f"{emotion_direction} "
             f"{emotion_word}."
@@ -1165,8 +1244,14 @@ def build_general_summary(
         info = general_feature_map[feature_name]
     elif feature_name in accel_feature_map:
         info = accel_feature_map[feature_name]
+    elif feature_name in sd_feature_map:
+        info = sd_feature_map[feature_name]
+    elif feature_name in battery_feature_map:
+        info = battery_feature_map[feature_name]
 
-    if info:
+    if info and feature_name in battery_feature_map:
+        g1 = clean_text(info["general1"])
+    elif info:
         g1 = clean_text(info["general1"])
         g2 = clean_text(info["general2"])
     else:
@@ -1181,17 +1266,29 @@ def build_general_summary(
     if s_dir == "less" and feature_name in FEWER_THAN_FEATURES:
         s_dir = "fewer"
 
+    if s_dir == "less" and feature_name in LIGHT_FEATURES:
+        s_dir = "dimmer"
+    elif s_dir == "more" and feature_name in LIGHT_FEATURES:
+        s_dir = "brighter"
+    elif s_dir == "less" and feature_name in battery_feature_map:
+        s_dir = "low"
+    elif s_dir == "more" and feature_name in battery_feature_map:
+        s_dir = "high"
+
     emotion_word = emotion_to_word(emotion)
 
     # Construct the base clause
-    sentence = f"When you were {e_dir} {emotion_word}, {g1}"
+    # sentence = f"When you were {e_dir} {emotion_word}, {g1}"
+    # sentence = f"When {g1} {s_dir}"
     
     # Append summary direction and general2 if general2 exists
     if g2:
-        sentence += f" {s_dir} {g2}"
+        sentence = f"When {g1} {s_dir} {g2}, you were {e_dir} {emotion_word}." 
+        # sentence += f" {s_dir} {g2}"
     else:
         # If there's no General2 context, fall back cleanly
-        sentence += f" {s_dir}"
+        sentence = f"When {g1} {s_dir}, you were {e_dir} {emotion_word}."
+        # sentence += f" {s_dir}"
 
     # Clean double spaces and ensure grammatical standard formatting
     return " ".join(sentence.split()).strip()
