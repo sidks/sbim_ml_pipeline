@@ -1715,7 +1715,7 @@ def generate_overlay_reports():
 
                     c.setFont(
                         "Helvetica",
-                        9
+                        8
                     )
 
                     wrapped = wrap(
