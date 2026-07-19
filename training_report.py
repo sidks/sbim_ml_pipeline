@@ -135,7 +135,7 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
     'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
     'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_average_daily_taps_per_hour', 
-    'keyboard_average_daily_words_per_hour']].transform(lambda x: x.fillna(x.mean())))
+    'keyboard_average_daily_words_per_hour', 'estimated_sleep_duration_hours']].transform(lambda x: x.fillna(x.mean())))
 
 # Step 2: For leftovers, fill with mean per beiwe_id
 df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
@@ -173,7 +173,7 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
     'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
     'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_average_daily_taps_per_hour', 
-    'keyboard_average_daily_words_per_hour']].transform(lambda x: x.fillna(x.mean())))
+    'keyboard_average_daily_words_per_hour', 'estimated_sleep_duration_hours']].transform(lambda x: x.fillna(x.mean())))
 
 df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'magnitude_std', 'magnitude_min_working_day', 'magnitude_max_working_day', 'magnitude_mean_working_day', 'magnitude_median_working_day', 
     'magnitude_std_working_day', 'magnitude_min_last_night', 'magnitude_max_last_night', 'magnitude_mean_last_night', 'magnitude_median_last_night', 'magnitude_std_last_night', 'app_usage_total_minutes_per_hour', 
@@ -210,7 +210,7 @@ df[['magnitude_min', 'magnitude_max', 'magnitude_mean', 'magnitude_median', 'mag
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
     'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
     'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_average_daily_taps_per_hour', 
-    'keyboard_average_daily_words_per_hour']].transform(lambda x: x.fillna(x.mean())))
+    'keyboard_average_daily_words_per_hour', 'estimated_sleep_duration_hours']].transform(lambda x: x.fillna(x.mean())))
 
 feeling_cols = ['happy_intensity', 'sad_intensity', 'social_intensity', 'calm_intensity', 'motivated_intensity', 'bored_intensity', 
                 'anxious_intensity', 'irritated_intensity']
@@ -233,7 +233,7 @@ features = [
     'app_usage_category_travel_minutes_daily', 'app_usage_category_finance_minutes_per_hour', 'app_usage_category_finance_minutes_daily', 
     'battery_level_min', 'battery_level_max', 'battery_level_mean', 'battery_level_median', 'time_spent_at_home_hrs_yesterday', 'time_spent_at_home_hrs_two_days_ago', 
     'time_spent_at_home_avg_hrs_past_week', 'keyboard_total_taps_per_hour', 'keyboard_total_words_per_hour', 'keyboard_average_daily_taps_per_hour', 
-    'keyboard_average_daily_words_per_hour'
+    'keyboard_average_daily_words_per_hour', 'estimated_sleep_duration_hours'
 ]
 
 target_lst = feeling_cols
