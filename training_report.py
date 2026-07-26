@@ -964,11 +964,6 @@ def build_threshold_sentence(
     elif feature_name in LIGHT_FEATURES and threshold_direction == "more than":
         threshold_direction = "brighter than"
 
-    if threshold_direction == "less than" and feature_name in MOVEMENT_FEATURES:
-        threshold_direction = "slower than"
-    elif threshold_direction == "more than" and feature_name in MOVEMENT_FEATURES:
-        threshold_direction = "faster than"
-
     # ========================================================
     # INTEGER FEATURES
     # ========================================================
@@ -1132,11 +1127,18 @@ def build_threshold_sentence(
             float(thresh)
         )
 
-        relation_word = (
-            "more"
-            if threshold_direction == "more than"
-            else "less"
-        )
+        if feature_name in MOVEMENT_FEATURES:
+            relation_word = (
+                "faster"
+                if threshold_direction == "more than"
+                else "slower"
+            )
+        else:
+            relation_word = (
+                "more"
+                if threshold_direction == "more than"
+                else "less"
+            )
 
         emotion_word = emotion_to_word(emotion)
 
@@ -1317,7 +1319,7 @@ def save_bar_plot(df_pid, path):
         for t in targets
     ]
 
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(8, 4))
 
     bars = plt.bar(
         labels,
@@ -1334,6 +1336,10 @@ def save_bar_plot(df_pid, path):
             ha="center",
             va="bottom"
         )
+
+    if means:
+        max_val = max(means)
+        plt.ylim(0, max_val * 1.15)  # Adjust 1.15 to 1.20 if you want even more space
 
     plt.xticks(rotation=45)
 
