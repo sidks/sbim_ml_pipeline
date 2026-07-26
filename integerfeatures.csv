@@ -59,8 +59,8 @@ app_usage_category_stickers_minutes_daily,you used stickers apps for,minutes,min
 app_usage_category_travel_minutes_daily,"you used travel apps (apps like Uber, AirBnB, and Expedia) for",minutes,minute,in a day,you spent,"time on travel apps (apps like Uber, AirBnB, and Expedia) daily"
 app_usage_category_utilities_minutes_daily,you used utilities apps (apps like Google and Chrome) for,minutes,minute,in a day,you spent,time on utilities apps (apps like Google and Chrome) daily
 app_usage_category_weather_minutes_daily,you used weather apps for,minutes,minute,in a day,you spent,time on weather apps daily
-distance_per_hour,you traveled,miles,mile,,you traveled,
-span_per_hour,you traveled,miles,mile,,you traveled,
+distance_per_hour,you traveled,miles,mile,,you traveled,distances
+span_per_hour,you traveled,miles,mile,,you traveled,distances
 num_incoming_messages_per_hour,you received,text messages,text message,,you received,text messages
 num_outgoing_messages_per_hour,you sent,text messages,text message,,you sent,text messages
 num_unique_contacts_per_hour,you were messaging,people,person,,you were messaging,people
@@ -78,7 +78,7 @@ unlocked_minutes_working_day,you unlocked your phone for,minutes,minute,during t
 screen_wakes_last_night,"your phone screen was awake (includes checking the time, receiving notifications)",times,time,during the night,"your phone screen was awake (includes checking the time, receiving notifications)",times at night
 unlocks_last_night,you unlocked your phone,times,time,during the night,you unlocked your phone,
 unlocked_minutes_last_night,you unlocked your phone for,minutes,minute,during the night,you unlocked your phone for,time at time
-estimated_sleep_duration_hours,"you were inactive during the night (includes sleeping, not checking your phone, charging your phone, not moving) for",hours,hour,,you were,"inactive during the night (includes sleeping, not checking your phone, charging your phone, not moving)"
+estimated_sleep_duration_hours,"you were sleeping for",hours,hour,,you were sleeping,
 time_spent_at_home_hrs_yesterday,you were at home for,hours,hour,in a day,"in a day, you spent",time at home
 time_spent_at_home_hrs_two_days_ago,you were at home for,hours,hour,in two days,"in two days, you spent",time at home
 time_spent_at_home_avg_hrs_past_week,you were at home for,hours,hour,in a week,"in a week, you spent",time at home
