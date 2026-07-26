@@ -926,6 +926,23 @@ LIGHT_FEATURES = {
     "mean_lux_mean"
 }
 
+MOVEMENT_FEATURES = {
+    "magnitude_max",
+    "magnitude_mean",
+    "magnitude_median",
+    "magnitude_max_working_day",
+    "magnitude_mean_working_day",
+    "magnitude_median_working_day",
+    "magnitude_max_last_night",
+    "magnitude_mean_last_night",
+    "magnitude_median_last_night"
+}
+
+DISTANCE_FEATURES = {
+    "span_per_hour",
+    "distance_per_hour"
+}
+
 # ============================================================
 # BUILD THRESHOLD SENTENCE
 # ============================================================
@@ -946,6 +963,11 @@ def build_threshold_sentence(
         threshold_direction = "dimmer than"
     elif feature_name in LIGHT_FEATURES and threshold_direction == "more than":
         threshold_direction = "brighter than"
+
+    if threshold_direction == "less than" and feature_name in MOVEMENT_FEATURES:
+        threshold_direction = "slower than"
+    elif threshold_direction == "more than" and feature_name in MOVEMENT_FEATURES:
+        threshold_direction = "faster than"
 
     # ========================================================
     # INTEGER FEATURES
@@ -1237,6 +1259,11 @@ def build_general_summary(
         s_dir = "low"
     elif s_dir == "more" and feature_name in battery_feature_map:
         s_dir = "high"
+
+    if s_dir == "less" and feature_name in DISTANCE_FEATURES:
+        s_dir = "shorter"
+    elif s_dir == "more" and feature_name in DISTANCE_FEATURES:
+        s_dir = "longer"
 
     emotion_word = emotion_to_word(emotion)
 
