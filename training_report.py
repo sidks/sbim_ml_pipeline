@@ -1317,7 +1317,7 @@ def save_bar_plot(df_pid, path):
         for t in targets
     ]
 
-    plt.figure(figsize=(8, 4))
+    plt.figure(figsize=(8, 6))
 
     bars = plt.bar(
         labels,
