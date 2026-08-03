@@ -1138,7 +1138,7 @@ def build_threshold_sentence(
             float(thresh)
         )
 
-        if feature_name in MOVEMENT_FEATURES:
+        if feature_name in MOVEMENT_FEATURES or feature_name in MINIMUM_MOVEMENT_FEATURES:
             relation_word = (
                 "faster"
                 if threshold_direction == "more than"
