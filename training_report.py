@@ -1122,6 +1122,10 @@ def build_threshold_sentence(
             feature_name
         ]
 
+        pre-translation = clean_text(
+            info["pre-translation"]
+        )
+
         translation = clean_text(
             info["translation"]
         )
