@@ -1122,7 +1122,7 @@ def build_threshold_sentence(
             feature_name
         ]
 
-        pre-translation = clean_text(
+        pretranslation = clean_text(
             info["pre-translation"]
         )
 
@@ -1156,7 +1156,7 @@ def build_threshold_sentence(
         
         if float(thresh) > 0.00 and feature_name in MINIMUM_MOVEMENT_FEATURES:
             sentence = (
-                f"{pre-translation} when "
+                f"{pretranslation} when "
                 f"{translation} "
                 f"{relation_word} than "
                 f"{parameter}"
