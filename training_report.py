@@ -568,6 +568,7 @@ for _, row in general_df.iterrows():
 accel_feature_map = {}
 for _, row in accel_df.iterrows():
     accel_feature_map[row["Feature Name"]] = {
+        "pre-translation": str(row.get("Pre-translation", "")).strip(),
         "translation": str(row.get("Translation", "")).strip(),
         "timing": str(row.get("timing", "")).strip(),
         "general1": str(row.get("General", "")).strip(),
@@ -938,6 +939,12 @@ MOVEMENT_FEATURES = {
     "magnitude_median_last_night"
 }
 
+MINIMUM_MOVEMENT_FEATURES = {
+    "magnitude_min",
+    "magnitude_min_working_day",
+    "magnitude_min_last_night"
+}
+
 DISTANCE_FEATURES = {
     "span_per_hour",
     "distance_per_hour"
@@ -1143,7 +1150,18 @@ def build_threshold_sentence(
         emotion_word = emotion_to_word(emotion)
 
         
-        if float(thresh) > 0.00:
+        if float(thresh) > 0.00 and feature_name in MINIMUM_MOVEMENT_FEATURES:
+            sentence = (
+                f"{pre-translation} when "
+                f"{translation} "
+                f"{relation_word} than "
+                f"{parameter}"
+                f"{' ' + timing if timing else ''}, " 
+                f"you were "
+                f"{emotion_direction} "
+                f"{emotion_word}."
+            )
+        elif float(thresh) > 0.00 and feature_name not in MINIMUM_MOVEMENT_FEATURES:
             sentence = (
                 f"When {translation} "
                 f"{relation_word} than "
