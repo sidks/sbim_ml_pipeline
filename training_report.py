@@ -236,6 +236,11 @@ features = [
     'keyboard_average_daily_words_per_hour', 'estimated_sleep_duration_hours'
 ]
 
+# Find participants that have at least one non-null value in the feature columns
+active_participants = df.dropna(subset=features, how="all")["cingo_username"].unique()
+# Keep only those participants in the DataFrame
+df = df[df["cingo_username"].isin(active_participants)]
+
 target_lst = feeling_cols
 df = df.dropna(subset = features).reset_index(drop = True)
 df = df[~(df['cingo_username'] == 'appstoretester1')]
@@ -261,8 +266,9 @@ for pid in tqdm(participants, desc="Participants"):
 
     df_p = df[df["cingo_username"] == pid].reset_index(drop=True)
     results_all[pid] = {}
-
-    print(f"No of days data for participant {pid} is {df_p['study_day'].nunique()}")
+    
+    if df_p['study_day'].nunique() < 15:
+        continue
 
     # ==========================================
     # LOOP OVER TARGETS
