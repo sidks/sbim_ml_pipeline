@@ -262,7 +262,7 @@ for pid in tqdm(participants, desc="Participants"):
     df_p = df[df["cingo_username"] == pid].reset_index(drop=True)
     results_all[pid] = {}
 
-    print(f"No of rows for participant {pid} is {df_p.shape}")
+    print(f"No of days data for participant {pid} is {df_p['study_day'].nunique()}")
 
     # ==========================================
     # LOOP OVER TARGETS
