@@ -77,7 +77,7 @@ unlocks_working_day,you unlocked your phone,times,time,during the day,you unlock
 unlocked_minutes_working_day,you unlocked your phone for,minutes,minute,during the day,you unlocked your phone for,time during the day
 screen_wakes_last_night,"your phone screen was awake (includes checking the time, receiving notifications)",times,time,during the night,"your phone screen was awake (includes checking the time, receiving notifications)",times at night
 unlocks_last_night,you unlocked your phone,times,time,during the night,you unlocked your phone,
-unlocked_minutes_last_night,you unlocked your phone for,minutes,minute,during the night,you unlocked your phone for,time at time
+unlocked_minutes_last_night,you unlocked your phone for,minutes,minute,during the night,you unlocked your phone for,time at night
 estimated_sleep_duration_hours,"you were sleeping for",hours,hour,,you were sleeping,
 time_spent_at_home_hrs_yesterday,you were at home for,hours,hour,in a day,"in a day, you spent",time at home
 time_spent_at_home_hrs_two_days_ago,you were at home for,hours,hour,in two days,"in two days, you spent",time at home
