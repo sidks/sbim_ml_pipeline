@@ -601,6 +601,13 @@ for _, row in battery_df.iterrows():
         "general1": str(row.get("General", "")).strip()
     }
 
+
+# Load the feature mapping CSV
+feature_mapping_df = pd.read_csv("xaxis_title_names.csv")  # Replace with your actual CSV path
+FEATURE_XAXIS_MAP = dict(
+    zip(feature_mapping_df["Feature Name"], feature_mapping_df["xaxis_name"])
+)
+
 # ============================================================
 # HARDCODED LUX THRESHOLDS
 # ============================================================
@@ -1297,6 +1304,11 @@ def build_general_summary(
     elif s_dir == "more" and feature_name in DISTANCE_FEATURES:
         s_dir = "longer"
 
+    if s_dir == "less" and feature_name in MINIMUM_MOVEMENT_FEATURES:
+        s_dir = "slower"
+    elif s_dir == "more" and feature_name in MINIMUM_MOVEMENT_FEATURES:
+        s_dir = "faster"
+
     emotion_word = emotion_to_word(emotion)
 
     # Construct the base clause
@@ -1383,14 +1395,7 @@ def save_bar_plot(df_pid, path):
 # DEPENDENCE PLOT
 # ============================================================
 
-def save_dependence_plot(
-    i,
-    shap_vals,
-    shap_data,
-    thresh,
-    path
-):
-
+def save_dependence_plot(i, shap_vals, shap_data, thresh, path, target):
     plt.figure(figsize=(FIG_W, FIG_H))
 
     shap.dependence_plot(
@@ -1399,25 +1404,26 @@ def save_dependence_plot(
         shap_data,
         feature_names=feature_names,
         interaction_index=None,
-        show=False
+        show=False,
     )
 
-    plt.ylabel("Impact on emotion")
+    # --- UPDATED AXES LABELS ---
+    # Convert target (e.g., 'happy_intensity') to clean emotion word (e.g., 'happy')
+    raw_emotion = display_target_name(target)
+    emotion_word = emotion_to_word(raw_emotion)
 
-    plt.axhline(
-        0,
-        linestyle="--",
-        alpha=0.4
-    )
+    plt.ylabel(f"Model Estimate of {emotion_word}")
+
+    # Lookup X-axis label from mapping, default to feature_names[i] if not present
+    feat_name = feature_names[i]
+    x_label = FEATURE_XAXIS_MAP.get(feat_name, feat_name)
+    plt.xlabel(x_label)
+    # ---------------------------
+
+    plt.axhline(0, linestyle="--", alpha=0.4)
 
     if thresh is not None:
-
-        plt.axvline(
-            thresh,
-            color="red",
-            linestyle="--",
-            alpha=0.8
-        )
+        plt.axvline(thresh, color="red", linestyle="--", alpha=0.8)
 
         y_top = plt.ylim()[1]
 
@@ -1428,13 +1434,11 @@ def save_dependence_plot(
             color="red",
             ha="center",
             va="bottom",
-            fontsize=9
+            fontsize=9,
         )
 
     plt.tight_layout()
-
     plt.savefig(path)
-
     plt.close()
 
 # ============================================================
@@ -1782,11 +1786,7 @@ def generate_overlay_reports():
                     )
 
                     save_dependence_plot(
-                        plot_idx,
-                        shap_vals,
-                        shap_data,
-                        thresh,
-                        img_path
+                        plot_idx, shap_vals, shap_data, thresh, img_path, t
                     )
 
                     graph_top = y_text - 23
