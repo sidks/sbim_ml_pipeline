@@ -79,9 +79,9 @@ screen_wakes_last_night,"your phone screen was awake (includes checking the time
 unlocks_last_night,you unlocked your phone,times,time,during the night,you unlocked your phone,
 unlocked_minutes_last_night,you unlocked your phone for,minutes,minute,during the night,you unlocked your phone for,time at night
 estimated_sleep_duration_hours,"you were sleeping for",hours,hour,,you were sleeping,
-time_spent_at_home_hrs_yesterday,you were at home for,hours,hour,in a day,"in a day, you spent",time at home
-time_spent_at_home_hrs_two_days_ago,you were at home for,hours,hour,in two days,"in two days, you spent",time at home
-time_spent_at_home_avg_hrs_past_week,you were at home for,hours,hour,in a week,"in a week, you spent",time at home
+time_spent_at_home_hrs_yesterday,you were at home for,hours,hour,in a day,you spent,time at home in a day
+time_spent_at_home_hrs_two_days_ago,you were at home for,hours,hour,in two days,you spent,time at home in two days
+time_spent_at_home_avg_hrs_past_week,you were at home for,hours,hour,in a week,you spent,time at home in a week
 keyboard_total_taps_per_hour,you tapped your keyboard,times,time,in an hour,you tapped your phone keyboard,times
 keyboard_total_words_per_hour,you typed,words,word,in an hour,you typed,words
 keyboard_input_modes,you used,keyboard inputs (like changing your language),keyboard input (like changing your language),in an hour,you used,keyboard inputs (like changing your language)
