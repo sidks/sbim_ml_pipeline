@@ -909,6 +909,17 @@ EMOTION_WORD_MAP = {
     
 }
 
+Y_AXIS_EMOTION_MAP = {
+    "happy": "happiness",
+    "sad": "sadness",
+    "calm": "calness",
+    "anxious": "anxiety",
+    "social": "sociability",
+    "irritated": "irritation",
+    "bored": "boredom",
+    "motivated": "motivation"
+}
+
 def emotion_to_word(emotion):
 
     return EMOTION_WORD_MAP.get(
@@ -1408,11 +1419,13 @@ def save_dependence_plot(i, shap_vals, shap_data, thresh, path, target):
     )
 
     # --- UPDATED AXES LABELS ---
-    # Convert target (e.g., 'happy_intensity') to clean emotion word (e.g., 'happy')
-    raw_emotion = display_target_name(target)
-    emotion_word = emotion_to_word(raw_emotion)
+    # Extract raw target name (e.g., 'happy_intensity' -> 'happy')
+    raw_emotion = display_target_name(target).lower()
+    
+    # Map to custom Y-axis display noun
+    y_emotion_word = Y_AXIS_EMOTION_MAP.get(raw_emotion, raw_emotion)
 
-    plt.ylabel(f"Model Estimate of {emotion_word}")
+    plt.ylabel(f"Model Estimate of {y_emotion_word}")
 
     # Lookup X-axis label from mapping, default to feature_names[i] if not present
     feat_name = feature_names[i]
