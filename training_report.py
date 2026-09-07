@@ -912,7 +912,7 @@ EMOTION_WORD_MAP = {
 Y_AXIS_EMOTION_MAP = {
     "happy": "happiness",
     "sad": "sadness",
-    "calm": "calness",
+    "calm": "calmness",
     "anxious": "anxiety",
     "social": "sociability",
     "irritated": "irritation",
