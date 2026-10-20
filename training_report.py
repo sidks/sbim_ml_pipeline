@@ -248,8 +248,16 @@ X = df[features]
 y = df[target_lst] if len(target_lst) > 1 else df[target_lst[0]]
 participants = df['cingo_username'].unique()
 
+print('Unique participants:', participants)
+
 y_df = y if isinstance(y, pd.DataFrame) else pd.DataFrame({(targets if isinstance(targets, str) else targets[0]): y})
 targets_list = list(y_df.columns)
+
+p1 = df['cingo_username' == 'SBP001']
+print('Shape of p1:', p1.shape)
+
+p2 = df['cingo_username' == 'SBP002']
+print('Shape of p2:', p2.shape)
 
 ############################################################################################## TRAINING OF THE MODEL ##############################################################################################
 
