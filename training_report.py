@@ -259,6 +259,15 @@ print('Shape of p1:', p1.shape)
 p2 = df[df['cingo_username'] == 'SBP002']
 print('Shape of p2:', p2.shape)
 
+# Returns a boolean Series (True for rows where ALL features are NaN)
+all_empty = p2[features].isna().all(axis=1)
+
+# Count how many such rows exist
+print("Number of completely empty rows:", all_empty.sum())
+
+# Display those rows
+print(p2[all_empty])
+
 ############################################################################################## TRAINING OF THE MODEL ##############################################################################################
 
 results_all = {}
