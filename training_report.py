@@ -253,10 +253,10 @@ print('Unique participants:', participants)
 y_df = y if isinstance(y, pd.DataFrame) else pd.DataFrame({(targets if isinstance(targets, str) else targets[0]): y})
 targets_list = list(y_df.columns)
 
-p1 = df[df['cingo_username' == 'SBP001']]
+p1 = df[df['cingo_username'] == 'SBP001']
 print('Shape of p1:', p1.shape)
 
-p2 = df[df['cingo_username' == 'SBP002']]
+p2 = df[df['cingo_username'] == 'SBP002']
 print('Shape of p2:', p2.shape)
 
 ############################################################################################## TRAINING OF THE MODEL ##############################################################################################
