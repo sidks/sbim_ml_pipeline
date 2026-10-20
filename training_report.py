@@ -268,6 +268,8 @@ print("Number of completely empty rows:", all_empty.sum())
 # Display those rows
 print(p2[all_empty])
 
+print(p2)
+
 ############################################################################################## TRAINING OF THE MODEL ##############################################################################################
 
 results_all = {}
