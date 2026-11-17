@@ -564,6 +564,19 @@ TARGET_NAME_MAP = {
     
 }
 
+EXCLUDED_REPORT_FEATURES = {
+    "battery_level_min",
+    "battery_level_max",
+    "battery_level_mean",
+    "battery_level_median",
+    "battery_level_earliest",
+    "battery_level_latest",
+    "battery_charging_num_pings",
+    "battery_not_charging_num_pings",
+    "battery_level_capture_start_time",
+    "battery_level_capture_end_time",
+}
+
 def display_target_name(t):
 
     return TARGET_NAME_MAP.get(t, t)
@@ -1684,14 +1697,19 @@ def generate_overlay_reports():
                         axis=0
                     )
 
-                    top_idx = np.argsort(
-                        mean_abs_shap
-                    )[::-1][:TOP_K]
+                    ranked_idx = np.argsort(mean_abs_shap)[::-1]
+
+                    # top_idx = np.argsort(
+                    #     mean_abs_shap
+                    # )[::-1][:TOP_K]
 
                     valid_features = []
                     threshold_cache = {}
 
-                    for i_feat in top_idx:
+                    for i_feat in ranked_idx:
+
+                        if feature_names[i_feat] in EXCLUDED_REPORT_FEATURES:
+                            continue
 
                         thresh, bx, by = shap_threshold(
                             shap_data[:, i_feat],
