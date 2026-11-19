@@ -321,8 +321,8 @@ def safe_corr(a, b):
     return float(np.corrcoef(a, b)[0, 1])
 
 
-def run_logo(df_t, target, feature_subset, seeds):
-    """LOGO over study_day, repeated for each seed.
+def run_logo(df_t, target, feature_subset, seeds, pbar=None):
+    """LOGO over study_day, repeated for each seed. Advances `pbar` by 1 per model fit.
 
     Returns a dict with per-row arrays (aligned to df_t row order):
       y_true, y_pred (seed-averaged), abs_err (seed-averaged per-row |error|),
@@ -338,6 +338,8 @@ def run_logo(df_t, target, feature_subset, seeds):
             model = make_model(seed)
             model.fit(X_all[train_idx], y_all[train_idx])
             preds[s_i, test_idx] = model.predict(X_all[test_idx])
+            if pbar is not None:
+                pbar.update(1)
 
     abs_err_per_seed = np.abs(preds - y_all[None, :])
     return {
@@ -365,22 +367,33 @@ def paired_wilcoxon(base_err, cond_err):
 emotion_records = []
 per_row_records = []
 
-for pid in tqdm(participants, desc="Participants"):
+for pid in tqdm(participants, desc="Participants", position=0):
     df_p = df[df["cingo_username"] == pid].reset_index(drop=True)
 
     if df_p["study_day"].nunique() < MIN_STUDY_DAYS:
+        tqdm.write(f"[skip] {pid}: only {df_p['study_day'].nunique()} study days")
         continue
 
+    # Total model fits for this participant = sum over targets of (folds x conditions x seeds)
+    valid_targets = []
+    total_fits = 0
     for target in targets_list:
+        n_folds = df_p.loc[df_p[target].notna(), "study_day"].nunique()
+        if n_folds >= 2:
+            valid_targets.append(target)
+            total_fits += n_folds * len(conditions) * len(SEEDS)
+
+    fit_bar = tqdm(total=total_fits, desc=f"  {pid} fits", position=1, leave=False, unit="fit")
+
+    for t_i, target in enumerate(valid_targets, 1):
         df_t = df_p[df_p[target].notna()].reset_index(drop=True)
 
-        if df_t["study_day"].nunique() < 2:
-            continue
-
-        cond_results = {
-            cond: run_logo(df_t, target, feats, SEEDS)
-            for cond, feats in conditions.items()
-        }
+        cond_results = {}
+        for c_i, (cond, feats) in enumerate(conditions.items(), 1):
+            fit_bar.set_postfix_str(
+                f"emotion {t_i}/{len(valid_targets)} {target} | cond {c_i}/{len(conditions)} {cond}"
+            )
+            cond_results[cond] = run_logo(df_t, target, feats, SEEDS, pbar=fit_bar)
         base = cond_results[BASELINE]
         base_mae = float(base["mae_per_seed"].mean())
         base_corr = float(np.nanmean(base["corr_per_seed"])) if not np.all(np.isnan(base["corr_per_seed"])) else np.nan
@@ -421,6 +434,12 @@ for pid in tqdm(participants, desc="Participants"):
                 "Corr_Improvement": cond_corr - base_corr,         # + = higher correlation than baseline
                 "Wilcoxon_p": paired_wilcoxon(base["abs_err"], res["abs_err"]),
             })
+
+    fit_bar.close()
+    tqdm.write(
+        f"[done] {pid}: {total_fits} fits in {fit_bar.format_dict['elapsed']:.1f}s "
+        f"({len(valid_targets)} emotions)"
+    )
 
 # ============================================================================================
 # PER PARTICIPANT x EMOTION
