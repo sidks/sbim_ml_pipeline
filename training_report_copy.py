@@ -271,12 +271,31 @@ targets_list = list(y_df.columns)
 #   - +<home feature>  : baseline + exactly ONE home-time feature (x3)
 #   - +all_home        : baseline + all 3 home-time features
 #
-# Every condition uses identical rows (df already drops NaNs across ALL features), identical
-# LOGO-by-study_day splits, and is repeated over SEEDS. Per-row absolute errors are averaged
-# across seeds, then compared between baseline and each condition with a paired Wilcoxon test.
+# Every condition uses identical rows (df already drops NaNs across ALL features) and identical
+# study_day-grouped CV splits (a day is never split across train/test). Per-row absolute errors
+# are averaged across seeds, then compared between baseline and each condition with a paired
+# Wilcoxon test.
 # ==============================================================================================
 
+# ----------------------------------------------------------------------------------------------
+# CONFIG — switch evaluation mode here
+# ----------------------------------------------------------------------------------------------
+# CV_MODE:
+#   "groupkfold" : GroupKFold(N_SPLITS) grouped by study_day  (fast; default)
+#   "logo"       : LeaveOneGroupOut over study_day, one fold per day (slow; original setup)
+CV_MODE = "groupkfold"
+N_SPLITS = 10            # used only when CV_MODE == "groupkfold" (capped at #days per participant)
+CV_RANDOM_STATE = 0      # which days go to which fold; same for every condition
+
+# DETERMINISTIC = True  -> subsample=1.0, colsample_bytree=1.0, single seed.
+#                          Model has no randomness, so any MAE change is caused only by the feature.
+# DETERMINISTIC = False -> subsample=0.8, colsample_bytree=0.8 (original), averaged over SEEDS_RANDOM.
+DETERMINISTIC = True
+SEEDS_RANDOM = [22, 23, 24, 25, 26]
+# ----------------------------------------------------------------------------------------------
+
 from scipy.stats import wilcoxon, binomtest
+from joblib import Parallel, delayed
 
 home_features = [
     "time_spent_at_home_hrs_yesterday",
@@ -293,8 +312,13 @@ for hf in home_features:
 conditions[ALL_HOME] = base_features_no_home + home_features
 single_feature_conditions = [f"+{hf}" for hf in home_features]
 
-SEEDS = [22]
+SEEDS = [22] if DETERMINISTIC else SEEDS_RANDOM
+ROW_SUBSAMPLE = 1.0 if DETERMINISTIC else 0.8
+COL_SUBSAMPLE = 1.0 if DETERMINISTIC else 0.8
 MIN_STUDY_DAYS = 14
+
+print(f"CV_MODE={CV_MODE}" + (f" (N_SPLITS={N_SPLITS})" if CV_MODE == "groupkfold" else "")
+      + f" | DETERMINISTIC={DETERMINISTIC} | seeds={SEEDS}")
 
 participants = sorted(df["cingo_username"].unique())
 
@@ -304,15 +328,28 @@ def make_model(seed):
         n_estimators=50,
         learning_rate=0.01,
         max_depth=None,
-        subsample=0.8,
-        colsample_bytree=0.8,
+        subsample=ROW_SUBSAMPLE,
+        colsample_bytree=COL_SUBSAMPLE,
         reg_lambda=1,
         reg_alpha=0.0,
         random_state=seed,
-        n_jobs=-1,
-        tree_method="hist",
+        n_jobs=1,              # 1 thread per model; parallelism is across fits (see N_WORKERS)
+        tree_method="exact",   # faster than "hist" on tiny per-participant datasets
         verbosity=0,
     )
+
+
+# Parallel workers for model fits. Uses the CPUs actually allocated to this process
+# (respects cluster/cgroup limits). Override with env var ABLATION_WORKERS.
+N_WORKERS = int(os.environ.get("ABLATION_WORKERS", len(os.sched_getaffinity(0))))
+print(f"Using {N_WORKERS} parallel workers for model fits")
+PARALLEL = Parallel(n_jobs=N_WORKERS, return_as="generator_unordered")
+
+
+def _fit_predict(seed, s_i, train_idx, test_idx, X_all, y_all):
+    model = make_model(seed)
+    model.fit(X_all[train_idx], y_all[train_idx])
+    return s_i, test_idx, model.predict(X_all[test_idx])
 
 
 def safe_corr(a, b):
@@ -321,8 +358,22 @@ def safe_corr(a, b):
     return float(np.corrcoef(a, b)[0, 1])
 
 
-def run_logo(df_t, target, feature_subset, seeds, pbar=None):
-    """LOGO over study_day, repeated for each seed. Advances `pbar` by 1 per model fit.
+def n_folds_for(n_days):
+    return n_days if CV_MODE == "logo" else min(N_SPLITS, n_days)
+
+
+def get_splits(X_all, groups):
+    if CV_MODE == "logo":
+        return list(LeaveOneGroupOut().split(X_all, groups=groups))
+    if CV_MODE == "groupkfold":
+        k = n_folds_for(groups.nunique())
+        return list(GroupKFold(n_splits=k, shuffle=True, random_state=CV_RANDOM_STATE)
+                    .split(X_all, groups=groups))
+    raise ValueError(f"Unknown CV_MODE: {CV_MODE}")
+
+
+def run_cv(df_t, target, feature_subset, seeds, pbar=None):
+    """Day-grouped CV (per CV_MODE), repeated for each seed. Advances `pbar` by 1 per model fit.
 
     Returns a dict with per-row arrays (aligned to df_t row order):
       y_true, y_pred (seed-averaged), abs_err (seed-averaged per-row |error|),
@@ -330,16 +381,18 @@ def run_logo(df_t, target, feature_subset, seeds, pbar=None):
     """
     X_all = df_t[feature_subset].to_numpy()
     y_all = df_t[target].to_numpy()
-    splits = list(LeaveOneGroupOut().split(X_all, groups=df_t["study_day"]))
+    splits = get_splits(X_all, df_t["study_day"])
 
     preds = np.zeros((len(seeds), len(y_all)))
-    for s_i, seed in enumerate(seeds):
-        for train_idx, test_idx in splits:
-            model = make_model(seed)
-            model.fit(X_all[train_idx], y_all[train_idx])
-            preds[s_i, test_idx] = model.predict(X_all[test_idx])
-            if pbar is not None:
-                pbar.update(1)
+    jobs = (
+        delayed(_fit_predict)(seed, s_i, train_idx, test_idx, X_all, y_all)
+        for s_i, seed in enumerate(seeds)
+        for train_idx, test_idx in splits
+    )
+    for s_i, test_idx, y_hat in PARALLEL(jobs):
+        preds[s_i, test_idx] = y_hat
+        if pbar is not None:
+            pbar.update(1)
 
     abs_err_per_seed = np.abs(preds - y_all[None, :])
     return {
@@ -378,10 +431,10 @@ for pid in tqdm(participants, desc="Participants", position=0):
     valid_targets = []
     total_fits = 0
     for target in targets_list:
-        n_folds = df_p.loc[df_p[target].notna(), "study_day"].nunique()
-        if n_folds >= 2:
+        n_days_t = df_p.loc[df_p[target].notna(), "study_day"].nunique()
+        if n_days_t >= 2:
             valid_targets.append(target)
-            total_fits += n_folds * len(conditions) * len(SEEDS)
+            total_fits += n_folds_for(n_days_t) * len(conditions) * len(SEEDS)
 
     fit_bar = tqdm(total=total_fits, desc=f"  {pid} fits", position=1, leave=False, unit="fit")
 
@@ -393,7 +446,7 @@ for pid in tqdm(participants, desc="Participants", position=0):
             fit_bar.set_postfix_str(
                 f"emotion {t_i}/{len(valid_targets)} {target} | cond {c_i}/{len(conditions)} {cond}"
             )
-            cond_results[cond] = run_logo(df_t, target, feats, SEEDS, pbar=fit_bar)
+            cond_results[cond] = run_cv(df_t, target, feats, SEEDS, pbar=fit_bar)
         base = cond_results[BASELINE]
         base_mae = float(base["mae_per_seed"].mean())
         base_corr = float(np.nanmean(base["corr_per_seed"])) if not np.all(np.isnan(base["corr_per_seed"])) else np.nan
