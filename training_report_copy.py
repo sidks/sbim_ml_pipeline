@@ -293,7 +293,7 @@ for hf in home_features:
 conditions[ALL_HOME] = base_features_no_home + home_features
 single_feature_conditions = [f"+{hf}" for hf in home_features]
 
-SEEDS = [22, 23, 24, 25, 26]
+SEEDS = [22]
 MIN_STUDY_DAYS = 14
 
 participants = sorted(df["cingo_username"].unique())
